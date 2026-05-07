@@ -1,8 +1,5 @@
-<script>
-export default {
-    data: function() {
-      return {
-        jobs: [{
+[
+  {
     "job_id": "MLA101",
     "job_title": "Machine Learning Intern",
     "category": "AI",
@@ -193,43 +190,3 @@ export default {
     "tags": ["RL", "deep learning", "AI"]
   }
 ]
-      }
-    }
-}
-</script>
-
-<template>
-    <p>Job Spotlight!</p>
-    <div class="container-fluid">
-<div class="row"><div class="col">
-    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div
-            v-for="(j, index) in jobs"
-            :key="j.job_id" 
-            :class="['carousel-item',
-            { active: index === 0 }]"
-            data-bs-interval="5000">
-                <div class="card">
-                    <div class="card-body text-start">
-                        <h5 class="card-title">{{j.job_title}}</h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary">{{j.salary_range}}</h6>
-                        <p class="card-text">{{j.job_description}}</p>
-                        <div class="text-center"><router-link :to="{ name: 'application', params: { id: j.job_id } }"> Apply Now </router-link></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-</div></div>
-<br/>
-</div>
-</template>

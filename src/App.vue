@@ -2,7 +2,6 @@
 </script>
 
 <template>
-  <div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <router-link class="navbar-brand" to="/">COS30043 Group Project</router-link>
@@ -17,5 +16,7 @@
     </div>
   </nav>
   <router-view />
-  </div>
+    <footer class="py-5 bg-dark">
+      <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Tuesday 11.30 - Group 1</p></div>
+  </footer>
 </template>
