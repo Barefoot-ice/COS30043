@@ -199,9 +199,12 @@ export default {
 </script>
 
 <template>
-    <p>Job Spotlight!</p>
-    <div class="container-fluid">
-<div class="row"><div class="col">
+  
+<div class="container">
+     
+<div class="row p-3"><div class="col-lg-8 p-3">
+  <div class="card">
+  <div class="card-header">Job Spotlight</div>
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div
@@ -210,14 +213,14 @@ export default {
             :class="['carousel-item',
             { active: index === 0 }]"
             data-bs-interval="5000">
-                <div class="card">
+                <!-- <div class="card"> -->
                     <div class="card-body text-start">
                         <h5 class="card-title">{{j.job_title}}</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">{{j.salary_range}}</h6>
                         <p class="card-text">{{j.job_description}}</p>
                         <div class="text-center"><router-link :to="{ name: 'application', params: { id: j.job_id } }"> Apply Now </router-link></div>
                     </div>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -229,7 +232,20 @@ export default {
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-</div></div>
+    </div>
+</div>
+<div class="col-lg-4 p-3">
+                    <div class="card mb-4">
+                        <div class="card-header">Quick Search</div>
+                        <div class="card-body">
+                            <div class="input-group">
+                                <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                                <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
 <br/>
 </div>
 </template>
