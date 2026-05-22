@@ -3,7 +3,7 @@
     <h3>Job Listings</h3>
 
     <ul class="job-list">
-      <li v-for="job in jobs" :key="job.job_id" class="job-item">
+      <li v-for="job in filteredJobs" :key="job.job_id" class="job-item">
         <router-link :to="`/jobs/${job.job_id}`">
           {{ job.job_id }} - {{ job.job_title }}
         </router-link>
@@ -15,6 +15,20 @@
 <script>
 // PLACEHOLDER JOBS 
 export default {
+    props: ['searchQuery'],
+
+    computed: {
+        filteredJobs() {
+            const query = this.searchQuery.toLowerCase();
+            if (!query) {
+                return this.jobs;
+            }
+            else return this.jobs.filter(job => 
+                job.job_title.toLowerCase().includes(query)
+            );
+        }
+    },
+
     data: function() {
       return {
         jobs: [{

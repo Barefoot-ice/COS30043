@@ -6,6 +6,7 @@ import apply from '../components/apply.vue'
 import jobListings from '../components/jobs/jobList.vue'
 import JobDetail from '../components/jobs/jobDetail.vue'
 import jobView from '../components/jobs/jobView.vue'
+import jobBlank from '../components/jobs/jobBlank.vue'
 
 const routes = [
 { path: '/', redirect: '/home' },
@@ -16,6 +17,8 @@ const routes = [
 
 { path: '/jobs', component: jobView,
     children: [
+        {path: '', component: jobBlank},
+
         { path: ':id', component: JobDetail }
     ]
 },
