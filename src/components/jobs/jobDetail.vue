@@ -47,6 +47,7 @@
     export default {
         data() {
             return {
+    //#region Placeholder Jobs
             jobs: [{
     "job_id": "MLA101",
     "job_title": "Machine Learning Intern",
@@ -105,6 +106,7 @@
     "tags": ["research", "AI", "NLP"]
   }
 ],
+//#endregion
             job: null
             };
         },

@@ -15,22 +15,34 @@
 <script>
 // PLACEHOLDER JOBS 
 export default {
-    props: ['searchQuery'],
+    props: ['searchQuery', 'selectedTag'],
 
     computed: {
         filteredJobs() {
-            const query = this.searchQuery.toLowerCase();
-            if (!query) {
-                return this.jobs;
-            }
-            else return this.jobs.filter(job => 
-                job.job_title.toLowerCase().includes(query)
-            );
-        }
+          let result = this.jobs;
+
+              if (this.selectedTag) {
+                result = result.filter(job =>
+                  job.tags.includes(this.selectedTag)
+                );
+              }
+
+              if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+
+                result = result.filter(job =>
+                  job.job_title.toLowerCase().includes(query)
+                );
+              }
+
+              return result;
+
     },
+  },
 
     data: function() {
       return {
+      //#region Placeholder Jobs
         jobs: [{
     "job_id": "MLA101",
     "job_title": "Machine Learning Intern",
@@ -89,6 +101,7 @@ export default {
     "tags": ["research", "AI", "NLP"]
   }
 ]
+//#endregion
       }
     }
 }
