@@ -2,7 +2,7 @@
 import { mapState } from "vuex";
 import { api } from "./lib/api";
 
-console.log(await api.getJobs().then(res => res.json()))
+console.log(await api.getJobs().then(res => res))
 
 
 export default {
