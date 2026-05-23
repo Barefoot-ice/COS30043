@@ -7,10 +7,17 @@ export default {
         nameInput: null
       }
     },
-  computed: mapState([
-    'loggedIn',
-    'user'
-  ]),
+  computed: {
+    ...mapState([
+      'loggedIn',
+      'user'
+    ]),
+    // Hide the navbar's log-in fields when the user is already on the dedicated sign-up / log-in page, to avoid two login forms competing for attention.
+    showAuthInNav: function() {
+      const hiddenRoutes = ['signup', 'login']
+      return !hiddenRoutes.includes(this.$route.name)
+    }
+  },
   methods:{
     submitLogIn: function(){
       this.$store.commit("logIn", this.nameInput)
@@ -38,7 +45,7 @@ export default {
                 <span class="navbar-text">Welcome, {{ user.firstName }}!</span>
                 <button class="btn btn-primary" @click="submitLogOut">Logout</button>
               </div>
-              <div v-else>
+              <div v-else-if="showAuthInNav">
                 <form class="d-flex">
                   <input type="text" class="form-control" placeholder="Username" v-model="nameInput">
                   <input type="text" class="form-control" placeholder="Password">
