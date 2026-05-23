@@ -1,8 +1,14 @@
 <script>
 export default {
+  name: 'Read',
+
     data: function() {
       return {
-        jobs: [{
+        // msg: '',
+        // err: '',
+        searchQuery: '',
+        jobs: [
+          {
     "job_id": "MLA101",
     "job_title": "Machine Learning Intern",
     "category": "AI",
@@ -194,7 +200,44 @@ export default {
   }
 ]
       }
+    },
+    methods: {
+      handleSearch: function () {
+      if (!this.searchQuery.trim()) return;
+        this.$store.commit('setHomeSearch', this.searchQuery);
+        this.$router.push({ name: 'jobs' });
+        this.searchQuery = '';
     }
+    },
+    computed: {
+        allTags() {
+        const tags = new Set();
+
+        this.jobs.forEach(job => {
+            job.tags.forEach(tag => tags.add(tag));
+        });
+
+        return Array.from(tags);
+        }
+    },
+    // created() {
+    // fetch('resources/apis.php/')
+    //   .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error: ${response.status}`)
+    //     }
+    //     return response.json()
+    //   })
+    //   .then(data => {
+    //     this.jobs = data
+    //     this.msg = 'Successful!'
+    //     this.err = ''
+    //   })
+    //   .catch(error => {
+    //     this.err = error.message
+    //   })
+    // }
+    
 }
 </script>
 
@@ -238,14 +281,33 @@ export default {
                     <div class="card mb-4">
                         <div class="card-header">Quick Search</div>
                         <div class="card-body">
-                            <div class="input-group">
-                                <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                                <button class="btn btn-primary" id="button-search" type="button">Go!</button>
-                            </div>
+                            <form class="d-flex">
+                              <input
+                                v-model="searchQuery" 
+                                class="form-control"
+                                type="text" 
+                                placeholder="Enter search term..."
+                                @keyup.enter="handleSearch"
+                              />
+                              <button class="btn btn-primary" @click="handleSearch">Search</button>
+                            </form>
                         </div>
                     </div>
+                    <!-- <div class="card mb-4">
+                        <div class="card-header">Search by Tag</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6" v-for="tag in allTags">
+                                    <ul class="list-unstyled mb-0">
+                                        <li><a href="#!">{{tag}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
                     </div>
                     </div>
 <br/>
+<div>{{ msg }} {{ err }}</div>
 </div>
 </template>

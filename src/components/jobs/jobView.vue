@@ -49,10 +49,14 @@ import JobList from "./jobList.vue";
 export default {
     data() {
         return {
+
+            // msg: '',
+            // err: '',
             searchQuery: "",
             selectedTag: "",
             //#region Placeholder Jobs
-            jobs: [{
+            jobs: [
+              {
                 "job_id": "MLA101",
                 "job_title": "Machine Learning Intern",
                 "category": "AI",
@@ -125,6 +129,33 @@ export default {
         return Array.from(tags);
         }
     },
+    // Allows search term to be passed from front page
+    created() {
+    const savedQuery = this.$store.state.homeSearch;
+
+    if (savedQuery) {
+      this.searchQuery = savedQuery;
+
+      this.$store.commit('clearHomeSearch');
+    }
+    
+    // fetch('resources/apis.php/')
+    //   .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error: ${response.status}`)
+    //     }
+    //     return response.json()
+    //   })
+    //   .then(data => {
+    //     this.jobs = data
+    //     this.msg = 'Successful!'
+    //     this.err = ''
+    //   })
+    //   .catch(error => {
+    //     this.err = error.message
+    //   })
+    
+  },
 
     components: {
         JobList

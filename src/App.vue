@@ -42,7 +42,7 @@ export default {
               <div v-else>
                 <form class="d-flex">
                   <input type="text" class="form-control" placeholder="Username" v-model="nameInput">
-                  <input type="text" class="form-control" placeholder="Password">
+                  <input type="text" class="form-control" placeholder="Password" @keyup.enter="submitLogIn">
                 <button class="btn btn-primary" @click="submitLogIn">Login</button>
                 </form>
                 </div>
