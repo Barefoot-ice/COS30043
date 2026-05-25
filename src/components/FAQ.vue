@@ -1,6 +1,7 @@
 <script></script>
 
 <template>
+<div class="container">
   <h1>FAQ</h1>
   <h3>Frequently asked questions</h3>
 <!-- Assumes bootstrap is installed -->
@@ -61,6 +62,7 @@
     </p>
   </div>
 <!-- spacer -->
+</div>
 </div>
 
 </template>
