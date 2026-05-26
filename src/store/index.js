@@ -3,6 +3,7 @@ import {createStore} from 'vuex'
 export const store = createStore({
     state(){
         return {
+            homeSearch: '',
             loggedIn: false,
             user: {firstName:null, lastName:null}
         }
@@ -17,6 +18,14 @@ export const store = createStore({
         logOut (state) {
             state.user.firstName = null
             state.loggedIn = false
+        },
+
+        setHomeSearch(state, payload) {
+            state.homeSearch = payload;
+        },
+
+        clearHomeSearch(state) {
+        state.homeSearch = '';
         }
     },
     actions:{}

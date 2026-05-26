@@ -2,7 +2,6 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../components/Home.vue'
 import FAQ from '../components/FAQ.vue'
 import signUp from '../components/signUp.vue'
-import apply from '../components/apply.vue'
 import jobListings from '../components/jobs/jobList.vue'
 import JobDetail from '../components/jobs/jobDetail.vue'
 import jobView from '../components/jobs/jobView.vue'
@@ -13,13 +12,12 @@ const routes = [
 { path: '/home', name:'home', component: Home},
 { path: '/FAQ', component: FAQ },
 { path: '/signup', component: signUp },
-{ path: '/apply/:id', name:'application', component: apply },
 
-{ path: '/jobs', component: jobView,
+{ path: '/jobs', name: 'jobView', component: jobView,
     children: [
-        {path: '', component: jobBlank},
+        {path: '', name: 'jobBlank', component: jobBlank},
 
-        { path: ':id', component: JobDetail }
+        { path: ':id', name: 'jobDetail', component: JobDetail}
     ]
 },
 ]
