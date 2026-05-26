@@ -19,9 +19,11 @@ export const store = createStore({
             state.user.firstName = null
             state.loggedIn = false
         },
+
         setHomeSearch(state, payload) {
             state.homeSearch = payload;
-            },
+        },
+
         clearHomeSearch(state) {
         state.homeSearch = '';
         }
