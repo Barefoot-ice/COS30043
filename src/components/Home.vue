@@ -129,6 +129,5 @@ export default {
                     </div>
                     </div>
 <br/>
-<div>{{ msg }} {{ err }}</div>
 </div>
 </template>
