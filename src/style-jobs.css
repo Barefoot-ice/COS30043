@@ -188,6 +188,17 @@ strong {
     color: #0056b3;
 }
 
+.job-app .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.job-app nav {
+    margin-top: 15px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .job-explorer-section {
