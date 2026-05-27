@@ -9,4 +9,14 @@ export const api = {
     const response = await fetch(`${BASE}/posts.php`);
     return response.json();
   },
+  getLogin: async (username, password) => {
+    const response = await fetch(`${BASE}/login.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: username, password: password })
+    });
+    return response.json();
+  }
 };

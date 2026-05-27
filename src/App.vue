@@ -2,19 +2,32 @@
 import { mapState } from "vuex";
 import { api } from "./lib/api";
 
-console.log(await api.getJobs().then(res => res))
-
-
 export default {
     data: function () {
         return {
-            nameInput: null,
+            loginErr: null
         };
     },
     computed: mapState(["loggedIn", "user"]),
     methods: {
-        submitLogIn: function () {
-            this.$store.commit("logIn", this.nameInput);
+        async submitLogIn(username, password) {
+            let userDetails = null
+            try {
+            userDetails = await api.getLogin(username, password);
+            }
+            catch (err)
+            {
+                console.error("Failed to load posts:", err);
+            }
+            if (userDetails && userDetails.length > 0)
+            {
+                this.$store.commit("logIn", userDetails[0]);
+                this.loginErr = null;
+            }
+            else
+            {
+                this.loginErr = 'Invalid Username or Password'
+            }
         },
         submitLogOut: function () {
             this.$store.commit("logOut");
@@ -48,19 +61,26 @@ export default {
                     </li>
                 </ul>
                 <div v-if="loggedIn">
-                    <span class="navbar-text">Welcome, {{ user.firstName }}!</span>
+                    <span class="navbar-text">Welcome, {{ user.username }}!</span>
                     <button class="btn btn-primary" @click="submitLogOut">
                         Logout
                     </button>
                 </div>
                 <div v-else>
-                    <form class="d-flex">
-                        <input type="text" class="form-control" placeholder="Username" v-model="nameInput" />
-                        <input type="text" class="form-control" placeholder="Password" />
-                        <button class="btn btn-primary" @click="submitLogIn">
-                            Login
-                        </button>
-                    </form>
+                    <form class="d-flex" @submit.prevent="submitLogIn($refs.username.value, $refs.password.value)">
+                    <input 
+                        type="text" 
+                        ref="username" 
+                        class="form-control" 
+                        placeholder="Username" />
+                    <input 
+                        type="password" 
+                        ref="password" 
+                        class="form-control" 
+                        placeholder="Password" />
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <p class="text-align-end" v-if="loginErr">{{ loginErr }}</p>
                 </div>
             </div>
         </div>
