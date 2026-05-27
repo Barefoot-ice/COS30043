@@ -5,18 +5,22 @@ export const store = createStore({
         return {
             homeSearch: '',
             loggedIn: false,
-            user: {firstName:null, lastName:null}
+            user: [{
+                account_id: null,
+                username: null,
+                role: null
+            }]
         }
     },
     getters:{},
     mutations:{
         logIn (state, username) {
-            state.user.firstName = username
+            state.user = username
             state.loggedIn = true
         },
 
         logOut (state) {
-            state.user.firstName = null
+            state.user = null
             state.loggedIn = false
         },
 
