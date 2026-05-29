@@ -161,7 +161,9 @@ export default {
                         </div>
                     </div>
                     <nav>
-                        <ul class="pagination justify-content-center"">
+                    <div class="row">
+                        <div class="col-md-6 px-0 ">
+                        <ul class="pagination justify-content-center justify-content-md-end">
                             <li :class="['page-item', { disabled: currentPage === 1 }]">
                             <button @click="currentPage=1" class="page-link">First</button>
                             </li>
@@ -178,10 +180,14 @@ export default {
                                 </li>
                             </template>
                             <li class="page-item active">
-                            <span class="page-link">{{ currentPage }}</span>
+                            <span class="page-link rounded-0">{{ currentPage }}</span>
                             </li>
-                            <li class="page-item active">
-                            <span class="page-link">{{ currentPage + 1 }}</span>
+                            </ul>
+</div>
+<div class="col-md-6 px-0 ">
+<ul class="pagination justify-content-center justify-content-md-start">
+                            <li class="page-item active ">
+                            <span class="page-link rounded-0">{{ currentPage + 1 }}</span>
                             </li>
                             <li v-if="currentPage < posts.length - 3" class="page-item">
                                 <span class="page-link">&hellip;</span>
@@ -199,9 +205,11 @@ export default {
                             <button @click="currentPage=this.posts.length-2" class="page-link">Last</button>
                             </li>
                         </ul>
+                        </div>
+                    </div>
                         </nav>
+                        </div>
                     </div>
                     </div>
 <br/>
-</div>
 </template>
