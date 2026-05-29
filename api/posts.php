@@ -51,7 +51,7 @@ if ($method === 'POST') {
     $postContent = [
         "title" => $input['title'],
         "body" => $input['body'],
-        "tags" => isset($input['tags']) ? $input['tags'] : []
+        "tags" => $input['tags'] ?? []
     ];
 
     $postContentJson = mysqli_real_escape_string(
