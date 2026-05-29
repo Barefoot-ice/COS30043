@@ -12,7 +12,10 @@ export const store = createStore({
             }]
         }
     },
-    getters:{},
+    getters:{
+        isLoggedIn: (state) => !!state.loggedIn,
+        userRole: (state) => state.user.role
+    },
     mutations:{
         logIn (state, username) {
             state.user = username
@@ -20,7 +23,11 @@ export const store = createStore({
         },
 
         logOut (state) {
-            state.user = null
+            state.user = [{
+                account_id: null,
+                username: null,
+                role: null
+            }]
             state.loggedIn = false
         },
 
