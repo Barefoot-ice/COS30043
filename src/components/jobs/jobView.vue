@@ -46,8 +46,8 @@ export default {
 
         try {
 
-            this.jobs = await api.getJobs();
-
+            this.jobs = (await api.getJobs()).filter((job) => job.approved === true);
+            
         } catch (err) {
             console.error("Failed to load jobs:", err);
         }
