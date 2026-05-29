@@ -57,6 +57,9 @@ export default {
                         <router-link class="nav-link" to="/FAQ">FAQ</router-link>
                     </li>
                     <li class="nav-item">
+                        <router-link class="nav-link" to="/about">About</router-link>
+                    </li>
+                    <li class="nav-item">
                         <router-link class="nav-link" to="/signup">Sign Up</router-link>
                     </li>
                 </ul>
