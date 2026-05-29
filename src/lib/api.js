@@ -27,7 +27,16 @@ const mapArrayToJob = (row) => {
     approvalRead: row[18] == 1,
   };
 };
-
+const mapArrayToUser = (row) => {
+  return {
+    acc_id: row[0],
+    username: row[1],
+    email: row[2],
+    password: row[3],
+    doc: row[4],
+    role: row[5]
+  };
+};
 export const api = {
   getJobs: async () => {
     const response = await fetch(`${BASE}/jobs.php`);
@@ -59,7 +68,7 @@ export const api = {
   },
     getAccount: async (id) => {
       const response = await fetch(`${BASE}/accountget.php?id=${id}`);
-      return response.json();
+      return mapArrayToJob(await response.json());
   },
     editAccount: async (id, username, email, password) => {
       const response = await fetch(`${BASE}/accountedit.php?id=${id}`, {
