@@ -1,9 +1,8 @@
 <?php
-http_response_code(400);
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit(0);
+    http_response_code(200);
+    exit();
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
