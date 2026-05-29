@@ -45,9 +45,9 @@ export default {
           role: "Frontend Developer",
           photo: danAvatar,
           contributions: [
-            "Built responsive UI components",
-            "Improved page load performance",
-            "Collaborated on design system"
+            "Account Details",
+            "Employer Job Posting",
+            "FAQ"
           ]
         },
         {
@@ -78,9 +78,9 @@ export default {
           role: "Full Stack Developer",
           photo: alexAvatar,
           contributions: [
-            "Built responsive UI components",
-            "Improved page load performance",
-            "Collaborated on design system"
+            "SQL Backend",
+            "Admin Dashboard",
+            "Job Listing Approval"
           ]
         },
         {
@@ -89,9 +89,9 @@ export default {
           role: "Project Manager",
           photo: chuckAvatar,
           contributions: [
-            "Built responsive UI components",
-            "Improved page load performance",
-            "Collaborated on design system"
+            "Social Media Feed",
+            "Social Post SQL Management",
+            "Social Media PHP"
           ]
         },
         {
@@ -100,9 +100,9 @@ export default {
           role: "DevOps Engineer",
           photo: michAvatar,
           contributions: [
-            "Built responsive UI components",
-            "Improved page load performance",
-            "Collaborated on design system"
+            "Sign up/Account creation",
+            "Login Page",
+            "Home/Landing Page"
           ]
         }
       ]
