@@ -1,4 +1,5 @@
 <script>
+import { api } from "./lib/api";
 import { mapState } from "vuex";
 
 export default {
