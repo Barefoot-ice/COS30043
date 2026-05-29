@@ -1,4 +1,5 @@
 import about from "../components/About.vue";
+import { store } from "../store/index.js";
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../components/Home.vue";
 import FAQ from "../components/FAQ.vue";
@@ -32,6 +33,7 @@ const routes = [
     path: "/admin",
     component: Admin,
     children: [{ path: ":id", component: JobApproveDetail }],
+    meta: { requiresLogIn: true, role: 'admin' }
   },
 ];
 const router = createRouter({
@@ -39,3 +41,17 @@ const router = createRouter({
   routes,
 });
 export default router;
+
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = store.getters.isLoggedIn;
+  const userRole = store.getters.userRole;
+  if (to.meta.requiresLogIn && !isLoggedIn) {
+    next('/home')
+    //next('/login')
+  } else if (to.meta.role && userRole !== to.meta.role) {
+    next('/home')
+    //next('/unauthorised')
+  } else {
+    next()
+  }
+});
