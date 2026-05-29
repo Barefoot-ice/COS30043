@@ -3,120 +3,115 @@
 
     <h2 class="mb-4">Social Feed</h2>
 
-    <!-- Create a new Post -->
+    <!-- Create Post -->
     <div class="card mb-4">
       <div class="card-body">
-
         <h5 class="card-title">Create Post</h5>
 
-        <form @submit.prevent="createPost">
+        <form @submit.prevent="submitPost">
+          <div class="mb-3">
+            <input
+              v-model="newPost.title"
+              type="text"
+              class="form-control"
+              placeholder="Post title"
+              required
+            />
+          </div>
 
-          <input
-            v-model="newPost.title"
-            type="text"
-            class="form-control mb-2"
-            placeholder="Title"
-            required
-          />
+          <div class="mb-3">
+            <textarea
+              v-model="newPost.body"
+              class="form-control"
+              placeholder="What's on your mind?"
+              rows="3"
+              required
+            ></textarea>
+          </div>
 
-          <textarea
-            v-model="newPost.body"
-            class="form-control mb-2"
-            placeholder="Write something..."
-            rows="3"
-            required
-          ></textarea>
+          <div class="mb-3">
+            <input
+              v-model="newPost.tags"
+              type="text"
+              class="form-control"
+              placeholder="Tags (comma separated: api, dev)"
+            />
+          </div>
 
-          <input
-            v-model="tagsInput"
-            type="text"
-            class="form-control mb-2"
-            placeholder="Tags (comma separated)"
-          />
-
-          <button class="btn btn-primary" :disabled="loadingCreate">
-            {{ loadingCreate ? "Posting..." : "Post" }}
+          <button class="btn btn-primary" type="submit" :disabled="loading">
+            Post
           </button>
-
         </form>
-
       </div>
     </div>
 
+    <!-- Loading -->
+    <div v-if="loading && posts.length === 0" class="alert alert-info">
+      Loading posts...
+    </div>
+
     <!-- Posts -->
-    <div v-if="loading">Loading posts...</div>
+    <div v-for="post in posts" :key="post.post_ID" class="card mb-3">
+      <div class="card-body">
 
-    <div v-else>
+        <h5 class="card-title">
+          {{ post.post_content?.title }}
+        </h5>
 
-      <div v-if="posts.length === 0" class="alert alert-info">
-        No posts found.
-      </div>
+        <p class="card-text">
+          {{ post.post_content?.body }}
+        </p>
 
-      <div v-for="post in posts" :key="post.post_ID" class="card mb-3">
-        <div class="card-body">
-
-          <h5 class="card-title">
-            {{ post.post_content?.title }}
-          </h5>
-
-          <p class="card-text">
-            {{ post.post_content?.body }}
-          </p>
-
-          <div v-if="post.post_content?.tags?.length">
-            <span
-              v-for="tag in post.post_content.tags"
-              :key="tag"
-              class="badge bg-secondary me-1"
-            >
-              #{{ tag }}
-            </span>
-          </div>
-
-          <hr />
-
-          <small class="text-muted">
-            Post #{{ post.post_ID }} | Account {{ post.account_id }} | {{ post.created_at }}
-          </small>
-
+        <!-- Tags -->
+        <div v-if="post.post_content?.tags?.length" class="mb-2">
+          <span
+            v-for="tag in post.post_content.tags"
+            :key="tag"
+            class="badge bg-secondary me-1"
+          >
+            #{{ tag }}
+          </span>
         </div>
-      </div>
 
+        <small class="text-muted">
+          Posted: {{ formatDate(post.created_at) }}
+        </small>
+
+      </div>
     </div>
 
   </div>
 </template>
 
 <script>
-import { api } from "../lib/api";
+import { api } from "../lib/api.js";
 
 export default {
+  name: "Social",
+
   data() {
     return {
       posts: [],
       loading: false,
-      loadingCreate: false,
 
       newPost: {
         title: "",
-        body: ""
-      },
-
-      tagsInput: ""
+        body: "",
+        tags: ""
+      }
     };
   },
 
-  async mounted() {
-    await this.fetchPosts();
+  mounted() {
+    this.fetchPosts();
   },
 
   methods: {
-
     async fetchPosts() {
       this.loading = true;
-
       try {
-        this.posts = await api.getPosts();
+        const data = await api.getPosts();
+        this.posts = Array.isArray(data) ? data : [];
       } catch (err) {
         console.error("Failed to load posts:", err);
       } finally {
@@ -124,34 +119,62 @@ export default {
       }
     },
 
-    async createPost() {
-      this.loadingCreate = true;
+    async submitPost() {
+      const account_id = localStorage.getItem("account_id");
+
+      if (!account_id) {
+        alert("No account_id found in localStorage.");
+        return;
+      }
+
+      this.loading = true;
 
       try {
         const payload = {
-          account_id: 1,
+          account_id: parseInt(account_id),
           title: this.newPost.title,
           body: this.newPost.body,
-          tags: this.tagsInput
-            ? this.tagsInput.split(",").map(t => t.trim()).filter(Boolean)
+          tags: this.newPost.tags
+            ? this.newPost.tags.split(",").map(t => t.trim()).filter(Boolean)
             : []
         };
 
-        const newPost = await api.createPost(payload);
+        const response = await fetch(
+          "https://mercury.swin.edu.au/cos30043/s105338913/assignment/api/posts.php",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          }
+        );
 
-        if (newPost && newPost.post_ID) {
-          this.posts.unshift(newPost);
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Failed to create post");
         }
 
+        // Prepend new post to feed
+        this.posts.unshift(result);
+
+        // Reset form
         this.newPost.title = "";
         this.newPost.body = "";
-        this.tagsInput = "";
+        this.newPost.tags = "";
 
       } catch (err) {
-        console.error("Failed to create post:", err);
+        console.error(err);
+        alert(err.message);
       } finally {
-        this.loadingCreate = false;
+        this.loading = false;
       }
+    },
+
+    formatDate(timestamp) {
+      if (!timestamp) return "";
+      return new Date(timestamp).toLocaleString();
     }
   }
 };
