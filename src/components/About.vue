@@ -10,21 +10,19 @@
     </p>
     <br>
     <h2>Our Team</h2>
-
-    <div class="team-container">
-      <div class="team-card" v-for="member in team" :key="member.email">
-        <img :src="member.photo" alt="profile" class="avatar">    
-        <p class="name">{{ member.name }}</p>
-        <p class="email">{{ member.email }}</p>
-
-        
-        <ul class="contributions">
-          <li v-for="(item, index) in member.contributions" :key="index">
-            {{ item }}
-          </li>
-        </ul>
-
-      </div>
+    <div class="row">
+            <div class="col-6 col-md-4" v-for="member in team" :key="member.email">
+                <div class="team-card">
+                    <img :src="member.photo" alt="profile" class="avatar">    
+                    <p class="name">{{ member.name }}</p>
+                    <p class="email">{{ member.email }}</p>
+                    <ul class="contributions">
+                    <li v-for="(item, index) in member.contributions" :key="index">
+                        {{ item }}
+                    </li>
+                    </ul>
+                </div>
+            </div>
     </div>
   </div>
 </template>
@@ -114,25 +112,6 @@ export default {
 </script>
 
 <style scoped>
-.about {
-  text-align: center;
-  padding: 20px;
-}
-
-.team-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 per row */
-  gap: 30px;
-  margin-top: 20px;
-}
-
-.team-card {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
 .avatar {
   width: 120px;
   height: 120px;
@@ -140,6 +119,15 @@ export default {
   object-fit: cover;
   margin-bottom: 10px;
 }
+
+.team-card {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin: 10px;
+}
+
 
 .name {
   color: #2563eb;
@@ -152,12 +140,13 @@ export default {
 }
 
 .contributions {
-  margin-top: 10px;
-  text-align: center;
-  padding-left: 20px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #555;
-  list-style: none;
+  padding-left: 18px;
+}
+
+ul {
+    list-style: none;
 }
 
 .about {
