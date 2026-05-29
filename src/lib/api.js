@@ -63,7 +63,7 @@ export const api = {
   },
     editAccount: async (id, username, email, password) => {
       const response = await fetch(`${BASE}/accountedit.php?id=${id}`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
