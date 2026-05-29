@@ -56,5 +56,19 @@ export const api = {
         body: JSON.stringify({ username: username, password: password })
     });
     return response.json();
-  }
+  },
+    getAccount: async (id) => {
+      const response = await fetch(`${BASE}/accountget.php?id=${id}`);
+      return response.json();
+  },
+    editAccount: async (id, username, email, password) => {
+      const response = await fetch(`${BASE}/accountedit.php?id=${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({username: username, email: email, password: password})
+    });
+    return response.json();
+  },
 };
