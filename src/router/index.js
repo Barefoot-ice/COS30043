@@ -7,6 +7,7 @@ import JobDetail from '../components/jobs/jobDetail.vue'
 import jobView from '../components/jobs/jobView.vue'
 import jobBlank from '../components/jobs/jobBlank.vue'
 import about from '../components/About.vue'
+import social from '../components/Social.vue'
 
 const routes = [
 { path: '/', redirect: '/home' },
@@ -14,6 +15,7 @@ const routes = [
 { path: '/FAQ', component: FAQ },
 { path: '/about', component: about },
 { path: '/signup', component: signUp },
+{path: '/social', component: social},
 
 { path: '/jobs', name: 'jobView', component: jobView,
     children: [
