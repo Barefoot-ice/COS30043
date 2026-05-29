@@ -2,10 +2,11 @@
 
 <template>
 <div class="container">
+  <div class="d-flex flex-column">
   <h1>FAQ</h1>
   <h3>Frequently asked questions</h3>
 <!-- Assumes bootstrap is installed -->
-<div class="d-flex flex-column">
+
   <!-- repeatable FAQ block -->
   <div class="shadow bg-white">
     <a class="text-primary" data-bs-toggle="collapse" href="#q1" role="button" aria-expanded="false" aria-controls="q1">
