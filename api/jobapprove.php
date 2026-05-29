@@ -9,13 +9,14 @@ require 'sql.php';
 
 if ($method === 'GET') {
     $jobid = $_GET["jobid"];
+    $approved = $_GET["approved"];
 
-    $query = "SELECT * FROM `jobs` WHERE job_id = \"" . $jobid . "\"";
+    $query = "UPDATE `jobs` SET approved = " . $approved . ", approvalRead = 1 WHERE job_id = \"" . $jobid . "\"";
 
-    $result = mysqli_query($conn, $query);
+    mysqli_query($conn, $query);
 
-    $data = mysqli_fetch_row($result);
+
     http_response_code(200);
-    echo json_encode($data);
+    echo "OK";
 }
 ?>

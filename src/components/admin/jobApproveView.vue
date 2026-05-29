@@ -1,17 +1,21 @@
 <script setup>
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import { api } from "../../lib/api"
-let jobs = await api.getJobs()
+import { useRoute } from "vue-router"
+
+const route = useRoute()
+
+let jobs = ref([])
 
 let currentPage = ref(1)
 function paginatedJobs() {
     const start = (currentPage.value - 1) * 8;
     const end = start + 8;
-    return jobs.slice(start, end);
+    return jobs.value.slice(start, end);
 }
 
 function totalPages() {
-    return Math.ceil(jobs.length / 8);
+    return Math.ceil(jobs.value.length / 8);
 }
 
 function visiblePages() {
@@ -22,13 +26,19 @@ function visiblePages() {
     return pages;
 }
 
-console.log(paginatedJobs())
+async function updateJobs() {
+    jobs.value = (await api.getJobs()).filter((job) => job.approvalRead === false)
+    currentPage.value = 1
+}
+
+await updateJobs()
+watch(() => route.params.id, () => updateJobs())
 
 </script>
 
 <template>
     <div class="job-list-container">
-        <h3>Job Listings</h3>
+        <h3>Job Listing Approvals</h3>
 
         <ul class="job-list">
             <li v-for="job in paginatedJobs()" :key="job.job_id" class="job-item">

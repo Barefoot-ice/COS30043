@@ -1,16 +1,43 @@
 <script setup>
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
+import { api } from "../../lib/api";
+import { ref, watch } from "vue";
 
 const route = useRoute()
-const jobId = route.params.id;
+const router = useRouter()
 
-console.log(jobId)
+
+const job = ref({})
+
+async function approve() {
+    await api.setJobApproved(jobId, true)
+    job.value = undefined
+    router.push("/admin")
+}
+
+async function deny() {
+    await api.setJobApproved(jobId, false)
+    job.value = undefined
+    router.push("/admin")
+}
+
+async function updateFetch(jobId) {
+    job.value = await api.getJobDetail(jobId)
+}
+
+const jobId = route.params.id;
+updateFetch(jobId)
+watch(() => route.params.id, (newId) => updateFetch(newId))
 </script>
 
 <template>
     <div class="job-detail">
         <div v-if="job">
             <h2>{{ job.job_id }}: {{ job.job_title }}</h2>
+            <div>
+                <button type="button" class="btn btn-success" @click="approve">Approve</button>
+                <button type="button" class="mx-1 btn btn-danger" @click="deny">Deny</button>
+            </div>
             <div class="detail-content">
                 <p><strong>Company:</strong> {{ job.company }}</p>
                 <p><strong>Supervisor:</strong> {{ job.supervisor }}</p>
