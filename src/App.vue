@@ -1,6 +1,5 @@
 <script>
 import { mapState } from "vuex";
-import { api } from "./lib/api";
 
 export default {
     data: function () {
@@ -13,19 +12,16 @@ export default {
         async submitLogIn(username, password) {
             let userDetails = null
             try {
-            userDetails = await api.getLogin(username, password);
+                userDetails = await api.getLogin(username, password);
             }
-            catch (err)
-            {
+            catch (err) {
                 console.error("Failed to load posts:", err);
             }
-            if (userDetails && userDetails.length > 0)
-            {
+            if (userDetails && userDetails.length > 0) {
                 this.$store.commit("logIn", userDetails[0]);
                 this.loginErr = null;
             }
-            else
-            {
+            else {
                 this.loginErr = 'Invalid Username or Password'
             }
         },
@@ -71,19 +67,11 @@ export default {
                 </div>
                 <div v-else>
                     <form class="d-flex" @submit.prevent="submitLogIn($refs.username.value, $refs.password.value)">
-                    <input 
-                        type="text" 
-                        ref="username" 
-                        class="form-control" 
-                        placeholder="Username" />
-                    <input 
-                        type="password" 
-                        ref="password" 
-                        class="form-control" 
-                        placeholder="Password" />
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-                <p class="text-align-end" v-if="loginErr">{{ loginErr }}</p>
+                        <input type="text" ref="username" class="form-control" placeholder="Username" />
+                        <input type="password" ref="password" class="form-control" placeholder="Password" />
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                    <p class="text-align-end" v-if="loginErr">{{ loginErr }}</p>
                 </div>
             </div>
         </div>
