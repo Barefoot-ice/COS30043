@@ -1,8 +1,6 @@
 <script>
 import { api } from "../lib/api";
 export default {
-  name: 'Read',
-
     data: function() {
       return {
         currentPage: 1,

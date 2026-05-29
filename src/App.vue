@@ -66,8 +66,11 @@ export default {
                     <li class="nav-item">
                         <router-link class="nav-link" to="/about">About</router-link>
                     </li>
-                    <li class="nav-item">
+                    <li v-if="loggedIn === false" class="nav-item">
                         <router-link class="nav-link" to="/signup">Sign Up</router-link>
+                    </li>
+                    <li v-if="user.role === 'admin'" class="nav-item">
+                        <router-link class="nav-link" to="/admin">Approve Job Posting</router-link>
                     </li>
                 </ul>
                 <div v-if="loggedIn">
