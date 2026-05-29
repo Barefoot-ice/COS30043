@@ -64,6 +64,17 @@ export default {
             return Array.from(tags);
         }
     },
+    
+    // Allows search term to be passed from front page
+    created() {
+    const savedQuery = this.$store.state.homeSearch;
+
+    if (savedQuery) {
+      this.searchQuery = savedQuery;
+
+      this.$store.commit('clearHomeSearch');
+    }
+    },
 
     components: {
         JobList

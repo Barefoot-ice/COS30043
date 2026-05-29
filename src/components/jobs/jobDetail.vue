@@ -59,7 +59,8 @@
             }
         },
         watch: {
-            '$route.params.id': "loadJob"
+            '$route.params.id': "loadJob",
+            'jobs': "loadJob"
         },
         mounted() {
             this.loadJob();
