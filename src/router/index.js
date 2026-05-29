@@ -1,11 +1,3 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import Home from "../components/Home.vue";
-import FAQ from "../components/FAQ.vue";
-import signUp from "../components/signUp.vue";
-import jobListings from "../components/jobs/jobList.vue";
-import JobDetail from "../components/jobs/jobDetail.vue";
-import jobView from "../components/jobs/jobView.vue";
-import jobBlank from "../components/jobs/jobBlank.vue";
 import about from "../components/About.vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../components/Home.vue";
@@ -35,6 +27,11 @@ const routes = [
 
       { path: ":id", name: "jobDetail", component: JobDetail },
     ],
+  },
+  {
+    path: "/admin",
+    component: Admin,
+    children: [{ path: ":id", component: JobApproveDetail }],
   },
 ];
 const router = createRouter({
