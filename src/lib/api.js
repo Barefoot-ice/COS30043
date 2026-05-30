@@ -67,11 +67,11 @@ export const api = {
     return response.json();
   },
     getAccount: async (id) => {
-      const response = await fetch(`${BASE}/accountget.php?id=${id}`);
-      return mapArrayToJob(await response.json());
+      const response = await fetch(`${BASE}/accountget.php?account_id=${id}`);
+      return mapArrayToUser(await response.json());
   },
     editAccount: async (id, username, email, password) => {
-      const response = await fetch(`${BASE}/accountedit.php?id=${id}`, {
+      const response = await fetch(`${BASE}/accountedit.php?account_id=${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
