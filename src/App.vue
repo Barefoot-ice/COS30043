@@ -62,6 +62,9 @@ export default {
                     <li v-if="loggedIn === false" class="nav-item">
                         <router-link class="nav-link" to="/signup">Sign Up</router-link>
                     </li>
+                    <li v-if="loggedIn === true" class="nav-item">
+                        <router-link class="nav-link" to="/account">Account Details</router-link>
+                    </li>
                 </ul>
                 <template v-if="loggedIn">
                     <span class="navbar-text">Welcome, {{ user.username }}!</span>
