@@ -1,4 +1,4 @@
-const BASE = "https://mercury.swin.edu.au/cos30043/s105139158/assignment/api";
+const BASE = "https://mercury.swin.edu.au/cos30043/s102096755/project/api";
 
 const mapArrayToJob = (row) => {
   return {
@@ -27,6 +27,16 @@ const mapArrayToJob = (row) => {
     approvalRead: row[18] == 1,
   };
 };
+const mapArrayToUser = (row) => {
+  return {
+    acc_id: row[0],
+    username: row[1],
+    email: row[2],
+    password: row[3],
+    created_at: row[4],
+    role: row[5]
+  };
+};
 
 export const api = {
   getJobs: async () => {
@@ -51,14 +61,6 @@ export const api = {
     const response = await fetch(`${BASE}/login.php?email=${email}&password=${password}`);
     return response.json();
   },
-  newUser: async (username, email, password) => {
-  const response = await fetch(`${BASE}/newUser.php`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, email, password })
-  });
-  return response.json();
- },
   createPost: async (post) => {
   const response = await fetch(`${BASE}/posts.php`, {
     method: "POST",

@@ -177,7 +177,7 @@ export default {
                 return
             }
             // now that the user exists, log them in.
-            const loggedInOk = await this.callLogIn(username, this.password)
+            const loggedInOk = await this.callLogIn(this.email, this.password)
             if (!loggedInOk) {
                 // Account was created but auto-login failed. Send them to the login page.
                 this.loginErr = 'Account created, but log in failed. Please log in manually.'
@@ -190,8 +190,7 @@ export default {
         async submitLogIn() {
             this.submitAttempted = true
             if (!this.loginValid) return
-            const username = this.email.split('@')[0]
-            const loggedInOk = await this.callLogIn(username, this.password)
+            const loggedInOk = await this.callLogIn(this.email, this.password)
             if (!loggedInOk) {
                 // callLogIn already set loginErr - just stop here.
                 return
