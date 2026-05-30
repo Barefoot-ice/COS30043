@@ -33,7 +33,7 @@ const mapArrayToUser = (row) => {
     username: row[1],
     email: row[2],
     password: row[3],
-    doc: row[4],
+    created_at: row[4],
     role: row[5]
   };
 };
