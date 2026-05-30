@@ -78,6 +78,7 @@ export const api = {
       },
       body: JSON.stringify({username: username, email: email, password: password})
     });
-    return response.json();
+    console.log(response);
+    return response;
   },
 };
