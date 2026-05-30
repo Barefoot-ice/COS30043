@@ -56,8 +56,8 @@ export const api = {
     const response = await fetch(`${BASE}/posts.php`);
     return response.json();
   },
-  getLogin: async (username, password) => {
-    const response = await fetch(`${BASE}/login.php?username=${username}&password=${password}`);
+  getLogin: async (email, password) => {
+    const response = await fetch(`${BASE}/login.php?email=${email}&password=${password}`);
     return response.json();
   },
   createPost: async (post) => {

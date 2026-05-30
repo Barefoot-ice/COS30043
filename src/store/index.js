@@ -18,8 +18,8 @@ export const store = createStore({
         userId: (state) => state.user.account_id 
     },
     mutations:{
-        logIn (state, username) {
-            state.user = username
+        logIn (state, userDetails) {
+            state.user = userDetails
             state.loggedIn = true
         },
 

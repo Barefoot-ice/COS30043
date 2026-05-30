@@ -110,10 +110,10 @@ export default {
                 console.error("Failed to submit:", err);
             }
         },
-        async callLogIn(username, password) {
+        async callLogIn(email, password) {
             let userDetails = null
             try {
-                userDetails = await api.getLogin(username, password);
+                userDetails = await api.getLogin(email, password);
             }
             catch (err) {
                 console.error("Failed to load posts:", err);
@@ -123,7 +123,7 @@ export default {
                 this.loginErr = null;
             }
             else {
-                this.loginErr = 'Invalid Username or Password'
+                this.loginErr = 'Invalid Email or Password'
             }
         },
         resetForm: function() {
@@ -173,8 +173,8 @@ export default {
             this.submitAttempted = true
             if (!this.loginValid) return
             // TODO: replace with POST to Mercury API once backend is ready. Ex: POST /api/login { email, password } -> { firstName, lastName, ... }
-            const username = this.email.split('@')[0]
-            this.callLogIn(username, this.password)
+            // const username = this.email.split('@')[0]
+            this.callLogIn(this.email, this.password)
             this.submitMessage = 'Welcome back!'
             setTimeout(() => { this.$router.push({ name: 'home' }) }, 800)
         }
