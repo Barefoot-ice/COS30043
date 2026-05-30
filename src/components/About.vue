@@ -46,7 +46,7 @@ export default {
           photo: danAvatar,
           contributions: [
             "Account Details",
-            "Employer Job Posting",
+            "Employer's Listing Management",
             "FAQ"
           ]
         },
@@ -56,9 +56,9 @@ export default {
           role: "Backend Developer",
           photo: daveAvatar,
           contributions: [
-            "Built responsive UI components",
-            "Improved page load performance",
-            "Collaborated on design system"
+            "Navigation",
+            "Home Page",
+            "VueX"
           ]
         },
         {
@@ -78,7 +78,7 @@ export default {
           role: "Full Stack Developer",
           photo: alexAvatar,
           contributions: [
-            "SQL Backend",
+            "API Set up",
             "Admin Dashboard",
             "Job Listing Approval"
           ]
@@ -90,8 +90,8 @@ export default {
           photo: chuckAvatar,
           contributions: [
             "Social Media Feed",
-            "Social Post SQL Management",
-            "Social Media PHP"
+            "Social Post PHP and API Management",
+            "SQL Queries"
           ]
         },
         {
@@ -100,9 +100,9 @@ export default {
           role: "DevOps Engineer",
           photo: michAvatar,
           contributions: [
-            "Sign up/Account creation",
-            "Login Page",
-            "Home/Landing Page"
+            "Sign up/Account Creation",
+            "Login Page and dynamic NavBar Login",
+            "Form Validation and Security"
           ]
         }
       ]
