@@ -1,15 +1,18 @@
 import {createStore} from 'vuex'
 
+const savedUser = JSON.parse(sessionStorage.getItem('user'))
+const savedLoggedIn = sessionStorage.getItem('loggedIn') === 'true'
+
 export const store = createStore({
     state(){
         return {
             homeSearch: '',
-            loggedIn: false,
-            user: [{
+            loggedIn: savedLoggedIn || false,
+            user: savedUser || {
                 account_id: null,
                 username: null,
                 role: null
-            }]
+            }
         }
     },
     getters:{
@@ -21,6 +24,8 @@ export const store = createStore({
         logIn (state, userDetails) {
             state.user = userDetails
             state.loggedIn = true
+            sessionStorage.setItem('user', JSON.stringify(userDetails))
+            sessionStorage.setItem('loggedIn', 'true')
         },
 
         logOut (state) {
@@ -30,6 +35,8 @@ export const store = createStore({
                 role: null
             }]
             state.loggedIn = false
+            sessionStorage.removeItem('user')
+            sessionStorage.removeItem('loggedIn')
         },
 
         setHomeSearch(state, payload) {
