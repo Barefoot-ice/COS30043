@@ -116,10 +116,10 @@ export default {
                 return false
             }
         },
-        async callLogIn(username, password) {
+        async callLogIn(email, password) {
             let userDetails = null
             try {
-                userDetails = await api.getLogin(username, password);
+                userDetails = await api.getLogin(email, password);
             }
             catch (err) {
                 console.error("Failed to log in:", err);
@@ -130,7 +130,7 @@ export default {
                 return true
             }
             else {
-                this.loginErr = 'Invalid Username or Password'
+                this.loginErr = 'Invalid Email or Password'
                 return false
             }
         },

@@ -8,12 +8,12 @@ $method = $_SERVER['REQUEST_METHOD'];
 require 'sql.php';
 
 if ($method === 'GET') {
-    $username = $_GET["username"];
+    $email = $_GET["email"];
     $password = $_GET["password"];
 
-    if (!empty($username) && !empty($password)) {
+    if (!empty($email) && !empty($password)) {
         
-        $query = "SELECT account_id, username, role FROM accounts WHERE username = '$username' AND password = '$password'";
+        $query = "SELECT account_id, username, role FROM accounts WHERE email = '$email' AND password = '$password'";
         $result = mysqli_query($conn, $query);
 
         $data = mysqli_fetch_all($result, MYSQLI_ASSOC);

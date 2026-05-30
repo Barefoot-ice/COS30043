@@ -20,10 +20,10 @@ export default {
     }
   },
     methods: {
-        async submitLogIn(username, password) {
+        async submitLogIn(email, password) {
             let userDetails = null
             try {
-                userDetails = await api.getLogin(username, password);
+                userDetails = await api.getLogin(email, password);
             }
             catch (err) {
                 console.error("Failed to load posts:", err);
@@ -33,11 +33,13 @@ export default {
                 this.loginErr = null;
             }
             else {
-                this.loginErr = 'Invalid Username or Password'
+                this.loginErr = 'Invalid Email or Password'
             }
         },
         submitLogOut: function () {
-            this.$store.commit("logOut");
+            this.$router.push({ name: 'home' }).then(() => {
+                this.$store.commit("logOut");
+            });
         },
     },
 };
@@ -66,9 +68,6 @@ export default {
                     <li class="nav-item">
                         <router-link class="nav-link" to="/about">About</router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" to="/social">Social</router-link>
-                    </li>
                     <li v-if="loggedIn === false" class="nav-item">
                         <router-link class="nav-link" to="/signup">Sign Up</router-link>
                     </li>
@@ -80,8 +79,8 @@ export default {
                     </button>
                 </template>
                 <template v-else-if="showAuthInNav">
-                    <form class="d-flex" @submit.prevent="submitLogIn($refs.username.value, $refs.password.value)">
-                        <input type="text" ref="username" class="form-control" placeholder="Username" />
+                    <form class="d-flex" @submit.prevent="submitLogIn($refs.email.value, $refs.password.value)">
+                        <input type="text" ref="email" class="form-control" placeholder="Email" />
                         <input type="password" ref="password" class="form-control" placeholder="Password" />
                         <button type="submit" class="btn btn-primary">Login</button>
                     </form>
@@ -99,17 +98,31 @@ export default {
                         What would you like to do today?
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li v-if="user.role === 'admin'" class="dropdown-header" >
-                            ---- ADMIN -----
-                        </li>
-                        <li v-if="user.role === 'admin'" class="dropdown-item">
-                            <router-link class="nav-link" to="/admin">Approve Job Posting</router-link>
-                        </li>
+                        <template v-if="user.role === 'admin'">
+                            <li class="dropdown-header" >
+                                ---- ADMIN -----
+                            </li>
+                            <li class="dropdown-item">
+                                <router-link class="nav-link" to="/admin">Approve Job Posting</router-link>
+                            </li>
+                        </template>
+                        <template v-if="user.role && user.role != 'employee'">
+                            <li class="dropdown-header">
+                            ---- EMPLOYER ----
+                            </li>
+                            <li class="dropdown-item">
+                                Post Job Listing
+                            <!-- <router-link class="nav-link" to="/jobpost">Post Job Listing</router-link> -->
+                            </li>
+                        </template>
                         <li class="dropdown-header">
                             ---- USER ----
                         </li>
                         <li class="dropdown-item">
                             <router-link class="nav-link" to="/social">Post to Social</router-link>
+                        </li>
+                        <li class="dropdown-item">
+                            <router-link class="nav-link" to="/account">Account Details</router-link>
                         </li>
                     </ul>
                 </div>
