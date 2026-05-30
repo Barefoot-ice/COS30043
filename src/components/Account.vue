@@ -54,7 +54,7 @@
     </div>
     <div class="col-12 col-md-6 col-lg-4">
         <label class="form-label fw-bold">Time of Account creation</label>
-        <input type="text" class="form-control" v-model="details.doc" readonly>
+        <input type="text" class="form-control" v-model="details.created_at" readonly>
     </div>
     <div class="col-12 col-md-6 col-lg-4">
         <label class="form-label fw-bold">Account permissions</label>
