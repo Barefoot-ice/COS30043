@@ -1,88 +1,122 @@
 <template>
   <div class="container py-4">
-    <h2 class="mb-4 text-center">Posts</h2>
 
-    <!-- Loading -->
-    <div v-if="loading" class="text-center py-5">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
+
+    <div class="d-flex flex-column gap-4 mx-auto" style="max-width: 720px;">
+
+      <!-- Header -->
+      <div class="text-center">
+        <h2 class="fw-bold">Social Feed</h2>
+        <p class="text-muted mb-0">Latest posts from the community</p>
       </div>
-    </div>
 
-    <!-- Error -->
-    <div v-else-if="error" class="alert alert-danger">
-      {{ error }}
-    </div>
+      <!-- Create Post (only displays if logged in) -->
+      <div v-if="loggedIn" class="card shadow-sm border-0">
+        <div class="card-body">
 
-    <!-- No posts -->
-    <div v-else-if="posts.length === 0" class="alert alert-info text-center">
-      No posts found.
-    </div>
+          <h5 class="mb-3 fw-semibold">Create Post</h5>
 
-    <!-- Posts feed -->
-    <div v-else class="row g-4 justify-content-center">
+          <input
+            v-model="newPost.title"
+            class="form-control mb-2"
+            placeholder="Title"
+          />
 
-      <div
-        class="col-12 col-lg-10 col-xl-8 mx-auto"
-        v-for="post in paginatedPosts"
-        :key="post.post_id"
-      >
-        <div class="card shadow-lg border-0">
+          <textarea
+            v-model="newPost.body"
+            class="form-control mb-2"
+            placeholder="What's on your mind?"
+            rows="3"
+          ></textarea>
 
-          <div class="card-body p-4">
+          <input
+            v-model="newPost.tags"
+            class="form-control mb-3"
+            placeholder="Tags (comma separated)"
+          />
 
-            <h5 class="card-title mb-2">
-              {{ post.post_content?.title || "Untitled" }}
-            </h5>
-
-            <p class="card-text text-muted mb-3">
-              {{ post.post_content?.body || "" }}
-            </p>
-
-            <!-- Tags -->
-            <div v-if="post.post_content?.tags?.length" class="mb-2">
-              <span
-                v-for="tag in post.post_content.tags"
-                :key="tag"
-                class="badge bg-secondary me-1"
-              >
-                {{ tag }}
-              </span>
-            </div>
-
-          </div>
-
-          <div class="card-footer text-muted small d-flex justify-content-between">
-            <span>{{ post.username }}</span>
-            <span>{{ formatDate(post.created_at) }}</span>
+          <div class="text-end">
+            <button class="btn btn-primary px-4" @click="submitPost">
+              Post
+            </button>
           </div>
 
         </div>
       </div>
 
+      <!-- Loading -->
+      <div v-if="loading" class="text-center py-5">
+        <div class="spinner-border text-primary"></div>
+      </div>
+
+      <!-- Error warning display -->
+      <div v-else-if="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <!-- If theres no posts -->
+      <div v-else-if="posts.length === 0" class="alert alert-info text-center">
+        No posts found.
+      </div>
+
+      <!-- Posts Feed -->
+      <div v-else class="d-flex flex-column gap-3">
+
+        <div
+          v-for="post in posts"
+          :key="post.post_id"
+          class="card border-0 shadow-sm"
+        >
+
+          <div class="card-body">
+
+            <!-- User profile display -->
+            <div class="d-flex align-items-center mb-2">
+
+              <!-- User profile image (get first letter of name and make a fake username)  -->
+              <div 
+                class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
+                style="width: 40px; height: 40px;"
+              >
+                {{ post.username?.charAt(0)?.toUpperCase() }}
+              </div>
+
+              <div>
+                <div class="fw-semibold">{{ post.username }}</div>
+                <div class="text-muted small">
+                  {{ formatDate(post.created_at) }}
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Content -->
+            <h6 class="fw-bold mb-2">
+              {{ post.post_content?.title || "Untitled" }}
+            </h6>
+
+            <p class="mb-2 text-dark">
+              {{ post.post_content?.body || "" }}
+            </p>
+
+            <!-- Tags -->
+            <div v-if="post.post_content?.tags?.length" class="d-flex flex-wrap gap-1">
+              <span
+                v-for="tag in post.post_content.tags"
+                :key="tag"
+                class="badge bg-light text-dark border"
+              >
+                #{{ tag }}
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
-
-    <!-- Pagination -->
-    <nav v-if="posts.length > pageSize" class="mt-4">
-      <ul class="pagination justify-content-center">
-
-        <li class="page-item" :class="{ disabled: currentPage === 1 }">
-          <button class="page-link" @click="currentPage--">Previous</button>
-        </li>
-
-        <li class="page-item disabled">
-          <span class="page-link">
-            Page {{ currentPage }} / {{ totalPages }}
-          </span>
-        </li>
-
-        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-          <button class="page-link" @click="currentPage++">Next</button>
-        </li>
-
-      </ul>
-    </nav>
-
   </div>
 </template>
 
@@ -98,21 +132,22 @@ export default {
       loading: false,
       error: null,
 
-      currentPage: 1,
-      pageSize: 4,
+      newPost: {
+        title: "",
+        body: "",
+        tags: ""
+      },
     };
   },
 
   computed: {
-    totalPages() {
-      return Math.ceil(this.posts.length / this.pageSize);
+    loggedIn() {
+      return this.$store.state.loggedIn;
     },
 
-    paginatedPosts() {
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = start + this.pageSize;
-      return this.posts.slice(start, end);
-    },
+    user() {
+      return this.$store.state.user;
+    }
   },
 
   async created() {
@@ -127,12 +162,14 @@ export default {
       try {
         const raw = await api.getPosts();
 
-        this.posts = raw.map(post => ({
-          post_id: post.post_id,
-          username: post.username,
-          post_content: post.post_content,
-          created_at: post.created_at,
-        }));
+        //this.posts = raw.map(post => ({
+        //  post_id: post.post_id,
+        //  username: post.username,
+        //  post_content: post.post_content,
+        //  created_at: post.created_at,
+        //}));
+
+        this.posts = raw; //Straight outta JSON
 
       } catch (err) {
         this.error = `Failed to load posts: ${err.message}`;
@@ -152,6 +189,32 @@ export default {
         minute: "2-digit",
       });
     },
-  },
+
+    async submitPost() {
+      try {
+        const payload = {
+          account_id: this.user.account_id,
+          post_content: {
+            title: this.newPost.title,
+            body: this.newPost.body,
+            tags: this.newPost.tags
+              ? this.newPost.tags.split(",").map(t => t.trim())
+              : []
+          }
+        };
+
+        await api.createPost(payload);
+
+        this.newPost.title = "";
+        this.newPost.body = "";
+        this.newPost.tags = "";
+
+        await this.fetchPosts();
+
+      } catch (err) {
+        console.error("Failed to create post:", err);
+      }
+    }
+  }
 };
 </script>

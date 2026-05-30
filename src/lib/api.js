@@ -18,5 +18,16 @@ export const api = {
         body: JSON.stringify({ username: username, password: password })
     });
     return response.json();
-  }
+  },
+  createPost: async (post) => {
+  const response = await fetch(`${BASE}/posts.php`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post),
+  });
+
+  return response.json();
+}
 };
