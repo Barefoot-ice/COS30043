@@ -1,5 +1,6 @@
 <script>
 import { mapState } from 'vuex'
+import { api } from "../lib/api";
 
 export default {
     data: function() {
@@ -18,7 +19,8 @@ export default {
             },
             submitAttempted: false,
             // Stubbed feedback for the user after a (fake) successful submit.
-            submitMessage: null
+            submitMessage: null,
+            loginErr: null,
         }
     },
     computed: {
@@ -100,6 +102,30 @@ export default {
         }
     },
     methods: {
+        async newUser(username, email, password) {
+            try {
+                console.log(await api.newUser(username, email, password));
+            }
+            catch (err) {
+                console.error("Failed to submit:", err);
+            }
+        },
+        async callLogIn(username, password) {
+            let userDetails = null
+            try {
+                userDetails = await api.getLogin(username, password);
+            }
+            catch (err) {
+                console.error("Failed to load posts:", err);
+            }
+            if (userDetails && userDetails.length > 0) {
+                this.$store.commit("logIn", userDetails[0]);
+                this.loginErr = null;
+            }
+            else {
+                this.loginErr = 'Invalid Username or Password'
+            }
+        },
         resetForm: function() {
             this.email = ''
             this.password = ''
@@ -136,8 +162,9 @@ export default {
             this.submitAttempted = true
             if (!this.passwordStepValid) return
             // TODO: replace with POST to Mercury API once backend is ready. Ex: POST /api/users { email, password } -> { firstName, lastName, ... }
-            const firstName = this.email.split('@')[0]
-            this.$store.commit('logIn', firstName)
+            const username = this.email.split('@')[0]
+            this.newUser(username, this.email, this.password)
+            this.callLogIn(username, this.password)
             this.submitMessage = 'Account created — welcome!'
             // Send the user to the home page once logged in.
             setTimeout(() => { this.$router.push({ name: 'home' }) }, 800)
@@ -146,8 +173,8 @@ export default {
             this.submitAttempted = true
             if (!this.loginValid) return
             // TODO: replace with POST to Mercury API once backend is ready. Ex: POST /api/login { email, password } -> { firstName, lastName, ... }
-            const firstName = this.email.split('@')[0]
-            this.$store.commit('logIn', firstName)
+            const username = this.email.split('@')[0]
+            this.callLogIn(username, this.password)
             this.submitMessage = 'Welcome back!'
             setTimeout(() => { this.$router.push({ name: 'home' }) }, 800)
         }
@@ -157,8 +184,8 @@ export default {
 
 <template>
     <div class="container py-5 justify-content-center">
-        <div class="row justify-content-center">
-            <div class="col justify-content-center">
+        <div class="row">
+            <div class="col">
 
                 <!-- If already logged in, show a friendly message instead of the form. -->
                 <div v-if="loggedIn" class="card shadow-sm">

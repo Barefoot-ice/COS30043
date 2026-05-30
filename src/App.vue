@@ -9,16 +9,16 @@ export default {
         };
     },
     computed: {
-        ...mapState([
-        'loggedIn',
-        'user'
-        ]),
-        // Hide the navbar's log-in fields when the user is already on the dedicated sign-up / log-in page, to avoid two login forms competing for attention.
-        showAuthInNav: function() {
-        const hiddenRoutes = ['signup', 'login']
-        return !hiddenRoutes.includes(this.$route.name)
-        }
-    },
+    ...mapState([
+      'loggedIn',
+      'user'
+    ]),
+    // Hide the navbar's log-in fields when the user is already on the dedicated sign-up / log-in page, to avoid two login forms competing for attention.
+    showAuthInNav: function() {
+      const hiddenRoutes = ['signup', 'login']
+      return !hiddenRoutes.includes(this.$route.name)
+    }
+  },
     methods: {
         async submitLogIn(username, password) {
             let userDetails = null
