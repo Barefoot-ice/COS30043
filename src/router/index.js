@@ -5,6 +5,7 @@ import Home from "../components/Home.vue";
 import FAQ from "../components/FAQ.vue";
 import signUp from "../components/signUp.vue";
 import apply from "../components/apply.vue";
+import account from "../components/Account.vue";
 import jobListings from "../components/jobs/jobList.vue";
 import JobDetail from "../components/jobs/jobDetail.vue";
 import jobView from "../components/jobs/jobView.vue";
@@ -18,7 +19,7 @@ const routes = [
   { path: "/FAQ", component: FAQ },
   { path: "/about", component: about },
   { path: "/signup", component: signUp },
-
+  { path: "/account", component: account },
   {
     path: "/jobs",
     name: "jobView",
