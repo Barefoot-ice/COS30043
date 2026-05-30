@@ -156,9 +156,9 @@ export default {
 </script>
 
 <template>
-    <div class="container py-5">
+    <div class="container py-5 justify-content-center">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-5">
+            <div class="col justify-content-center">
 
                 <!-- If already logged in, show a friendly message instead of the form. -->
                 <div v-if="loggedIn" class="card shadow-sm">
@@ -169,7 +169,7 @@ export default {
                     </div>
                 </div>
 
-                <div v-else class="card shadow-sm">
+                <div v-else class="card shadow-sm" >
                     <div class="card-body p-4">
 
                         <!-- Animated step transitions: slide left/right depending on direction. -->
