@@ -46,9 +46,12 @@ export default {
             return null
         },
         confirmPasswordError: function() {
+            // Show mismatch warning live as the user types (no touched gate) but only flag "required" after blur or submit attempt.
+            if (this.confirmPassword !== '' && this.confirmPassword !== this.password) {
+                return 'Passwords do not match.'
+            }
             if (!this.touched.confirmPassword && !this.submitAttempted) return null
             if (this.confirmPassword === '') return 'Please confirm your password.'
-            if (this.confirmPassword !== this.password) return 'Passwords do not match.'
             return null
         },
         // Strength score 0-4 based on length + character variety.
@@ -104,10 +107,13 @@ export default {
     methods: {
         async newUser(username, email, password) {
             try {
-                console.log(await api.newUser(username, email, password));
+                const result = await api.newUser(username, email, password);
+                console.log(result);
+                return result && result.status === 'success'
             }
             catch (err) {
-                console.error("Failed to submit:", err);
+                console.error("Failed to create user:", err);
+                return false
             }
         },
         async callLogIn(email, password) {
@@ -116,14 +122,16 @@ export default {
                 userDetails = await api.getLogin(email, password);
             }
             catch (err) {
-                console.error("Failed to load posts:", err);
+                console.error("Failed to log in:", err);
             }
             if (userDetails && userDetails.length > 0) {
                 this.$store.commit("logIn", userDetails[0]);
                 this.loginErr = null;
+                return true
             }
             else {
                 this.loginErr = 'Invalid Email or Password'
+                return false
             }
         },
         resetForm: function() {
@@ -158,23 +166,35 @@ export default {
             this.step = 'signup-email'
             this.submitAttempted = false
         },
-        submitSignUp: function() {
+        async submitSignUp() {
             this.submitAttempted = true
             if (!this.passwordStepValid) return
-            // TODO: replace with POST to Mercury API once backend is ready. Ex: POST /api/users { email, password } -> { firstName, lastName, ... }
             const username = this.email.split('@')[0]
-            this.newUser(username, this.email, this.password)
-            this.callLogIn(username, this.password)
-            this.submitMessage = 'Account created — welcome!'
-            // Send the user to the home page once logged in.
+            // create the user in the database, and wait for it to finish.
+            const createdOk = await this.newUser(username, this.email, this.password)
+            if (!createdOk) {
+                this.loginErr = 'Could not create account. Please try again.'
+                return
+            }
+            // now that the user exists, log them in.
+            const loggedInOk = await this.callLogIn(this.email, this.password)
+            if (!loggedInOk) {
+                // Account was created but auto-login failed. Send them to the login page.
+                this.loginErr = 'Account created, but log in failed. Please log in manually.'
+                return
+            }
+            // both steps succeeded, show success and redirect.
+            this.submitMessage = 'Account created - welcome!'
             setTimeout(() => { this.$router.push({ name: 'home' }) }, 800)
         },
-        submitLogIn: function() {
+        async submitLogIn() {
             this.submitAttempted = true
             if (!this.loginValid) return
-            // TODO: replace with POST to Mercury API once backend is ready. Ex: POST /api/login { email, password } -> { firstName, lastName, ... }
-            // const username = this.email.split('@')[0]
-            this.callLogIn(this.email, this.password)
+            const loggedInOk = await this.callLogIn(this.email, this.password)
+            if (!loggedInOk) {
+                // callLogIn already set loginErr - just stop here.
+                return
+            }
             this.submitMessage = 'Welcome back!'
             setTimeout(() => { this.$router.push({ name: 'home' }) }, 800)
         }
@@ -196,7 +216,7 @@ export default {
                     </div>
                 </div>
 
-                <div v-else class="card shadow-sm" >
+                <div v-else class="card shadow-sm">
                     <div class="card-body p-4">
 
                         <!-- Animated step transitions: slide left/right depending on direction. -->
@@ -254,7 +274,7 @@ export default {
                             <!-- STEP: SIGN-UP, STEP 1 (EMAIL) -->
                             <div v-else-if="step === 'signup-email'" key="signup-email">
                                 <h4 class="card-title mb-1">Create Account</h4>
-                                <p class="text-body-secondary mb-4">Step 1 of 2 — enter your email to get started.</p>
+                                <p class="text-body-secondary mb-4">Step 1 of 2 - enter your email to get started.</p>
 
                                 <div class="mb-3">
                                     <label for="signup-email" class="form-label">Email</label>
@@ -287,7 +307,7 @@ export default {
                             <div v-else-if="step === 'signup-password'" key="signup-password">
                                 <h4 class="card-title mb-1">Create Password</h4>
                                 <p class="text-body-secondary mb-4">
-                                    Step 2 of 2 — secure your account for <strong>{{ email }}</strong>.
+                                    Step 2 of 2 - secure your account for <strong>{{ email }}</strong>.
                                 </p>
 
                                 <div class="mb-3">

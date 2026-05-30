@@ -31,6 +31,5 @@ if ($method === 'POST') {
         http_response_code(400);
         echo json_encode(["status" => "error", "message" => "All fields are required."]);
     }
-    echo json_encode(["status" => "error", "message" => "Other."]);
 }
 ?>

@@ -18,7 +18,7 @@ export const store = createStore({
     getters:{
         isLoggedIn: (state) => !!state.loggedIn,
         userRole: (state) => state.user.role,
-        userId: (state) => state.user.account_id 
+        userId: (state) => state.user.account_id
     },
     mutations:{
         logIn (state, userDetails) {
@@ -29,11 +29,11 @@ export const store = createStore({
         },
 
         logOut (state) {
-            state.user = [{
+            state.user = {
                 account_id: null,
                 username: null,
                 role: null
-            }]
+            }
             state.loggedIn = false
             sessionStorage.removeItem('user')
             sessionStorage.removeItem('loggedIn')

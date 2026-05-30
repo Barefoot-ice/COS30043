@@ -4,11 +4,10 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 
 Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
 
-
-Dependancy installation  
-npm install  
-npm install vue-router  
-npm install vuex  
-npm install bootstrap  
-npm install vuetify @mdi/font  
-npm install -D vite-plugin-vuetify  
+## Dependancy installation  
+1. npm install  
+2. npm install vue-router  
+3. npm install vuex  
+4. npm install bootstrap  
+5. npm install vuetify @mdi/font  
+6. npm install -D vite-plugin-vuetify 

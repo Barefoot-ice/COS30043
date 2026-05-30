@@ -37,6 +37,7 @@ const mapArrayToUser = (row) => {
     role: row[5]
   };
 };
+
 export const api = {
   getJobs: async () => {
     const response = await fetch(`${BASE}/jobs.php`);

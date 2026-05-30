@@ -97,12 +97,12 @@ export default {
         {
           name: "Michael Attardi",
           email: "102096755@student.swin.edu.au",
-          role: "DevOps Engineer",
+          role: "Frontend Developer",
           photo: michAvatar,
           contributions: [
-            "Sign up/Account Creation",
-            "Login Page and dynamic NavBar Login",
-            "Form Validation and Security"
+            "Sign-Up / Log-In Page",
+            "Rensponsive form validation & error handling.",
+            "Password strength indicator."
           ]
         }
       ]
