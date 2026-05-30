@@ -56,6 +56,9 @@ export default {
                     <li class="nav-item">
                         <router-link class="nav-link" to="/about">About</router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/social">Social</router-link>
+                    </li>
                     <li v-if="loggedIn === false" class="nav-item">
                         <router-link class="nav-link" to="/signup">Sign Up</router-link>
                     </li>
