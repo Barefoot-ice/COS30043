@@ -46,9 +46,12 @@ export default {
             return null
         },
         confirmPasswordError: function() {
+            // Show mismatch warning live as the user types (no touched gate) but only flag "required" after blur or submit attempt.
+            if (this.confirmPassword !== '' && this.confirmPassword !== this.password) {
+                return 'Passwords do not match.'
+            }
             if (!this.touched.confirmPassword && !this.submitAttempted) return null
             if (this.confirmPassword === '') return 'Please confirm your password.'
-            if (this.confirmPassword !== this.password) return 'Passwords do not match.'
             return null
         },
         // Strength score 0-4 based on length + character variety.
