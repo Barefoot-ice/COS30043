@@ -1,12 +1,12 @@
 <script></script>
 
 <template>
-<div class="container">
-  <div class="d-flex flex-column">
-  <h1>FAQ</h1>
-  <h3>Frequently asked questions</h3>
+<div class="container py-5">
+  
+  <div class="mx-auto" style="max-width: 700px;">
+  <h3 class="mb-4">Frequently asked questions</h3>
 <!-- Assumes bootstrap is installed -->
-
+<div class="d-flex flex-column gap-1">
   <!-- repeatable FAQ block -->
   <div class="shadow bg-white">
     <a class="text-primary" data-bs-toggle="collapse" href="#q1" role="button" aria-expanded="false" aria-controls="q1">
@@ -65,5 +65,5 @@
 <!-- spacer -->
 </div>
 </div>
-
+</div>
 </template>

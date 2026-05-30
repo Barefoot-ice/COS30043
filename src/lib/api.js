@@ -48,23 +48,18 @@ export const api = {
     return response.json();
   },
   getLogin: async (username, password) => {
-    const response = await fetch(`${BASE}/login.php`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username: username, password: password })
-    });
+    const response = await fetch(`${BASE}/login.php?username=${username}&password=${password}`);
     return response.json();
   },
-  newUser: async (username, email, password)=> {
-    const response = await fetch(`${BASE}/newUser.php`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username: username, email: email, password: password })
-    });
-    return response.json();
-  }
+  createPost: async (post) => {
+  const response = await fetch(`${BASE}/posts.php`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post),
+  });
+
+  return response.json();
+}
 };
