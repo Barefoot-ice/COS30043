@@ -19,7 +19,10 @@ const routes = [
   { path: "/FAQ", component: FAQ },
   { path: "/about", component: about },
   { path: "/signup", component: signUp },
-  {path: '/social', component: social},
+  { path: '/social',
+    component: social,
+    meta: { requiresLogIn: true}
+  },
 
   {
     path: "/jobs",

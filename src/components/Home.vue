@@ -14,34 +14,24 @@ export default {
         this.$store.commit('setHomeSearch', this.searchQuery);
         this.$router.push({ name: 'jobBlank' });
         this.searchQuery = '';
+    },
+    formatDate(timestamp) {
+      if (!timestamp) return "";
+
+      return new Date(timestamp).toLocaleDateString("en-AU", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     }
     },
-    computed: {
-        allTags() {
-        const tags = new Set();
-
-        this.jobs.forEach(job => {
-            job.tags.forEach(tag => tags.add(tag));
-        });
-
-        return Array.from(tags);
-        },
-        totalPages() {
-        return Math.ceil(this.posts.length / 2);
-        },
-        
+    computed: {       
         paginatedPosts() {
-            const start = this.currentPage;
+            const start = this.currentPage-1;
             const end = start + 2;
             return this.posts.slice(start, end);
-        },
-
-        visiblePages() {
-            const pages = [];    
-            for (let page = this.currentPage; page <= this.currentPage + 1; page++) {
-            pages.push(page);
-            }
-            return pages;
         }
     },
     async mounted () {
@@ -123,91 +113,101 @@ export default {
                 </form>
             </div>
         </div>
-                    <!-- <div class="card mb-4">
-                        <div class="card-header">Search by Tag</div>
+    </div>
+    <div class="row p-3">
+        <div class="col">
+            <div class="card mb-4">
+                <div class="card-header">User Posts</div>
+                    <div
+                    v-for="post in paginatedPosts"
+                    :key="post.post_id"
+                    class="card shadow-sm"
+                    >
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6" v-for="tag in allTags">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="#!">{{tag}}</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-                    </div>
-                    <div class="row p-3">
-                        <div class="col">
-                        <div class="card mb-4">
-                            <div class="card-header">User Posts</div>
-                            <!-- Blog post-->
-                            <div v-for="p in paginatedPosts" class="card m-2" :key="p.post_id" >
-                                <div class="card-body">
-                                    <div class="small text-muted">{{p.created_at}}</div>
-                                    <h2 class="card-title h4">{{p.post_content.title}}</h2>
-                                    <p class="card-text">{{p.post_content.body}}</p>
-                                    <!-- <div class="card-group">
-                                    <div v-for="t in p.post_content.tags" class="card">
-                                    <div class="card-body">
-                                        <p class="card-text">{{ t }}</p>
-                                    </div>    
+                            <!-- User profile display -->
+                                <div class="d-flex align-items-center mb-2">
+                                    <!-- User profile image (get first letter of name and make a fake username)  -->
+                                    <div 
+                                        class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
+                                        style="width: 40px; height: 40px;"
+                                    >
+                                        {{ post.username?.charAt(0)?.toUpperCase() }}
                                     </div>
-                                    </div> -->
-                                    <!-- <a class="btn btn-primary" href="#!">Read more →</a> -->
+                                        <div>
+                                            <div class="fw-semibold">{{ post.username }}</div>
+                                            <div class="text-muted small">
+                                            {{ formatDate(post.created_at) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Content -->
+                                    <h6 class="fw-bold mb-2">
+                                        {{ post.post_content?.title || "Untitled" }}
+                                    </h6>
+                                    <p class="mb-2 text-dark">
+                                    {{ post.post_content?.body || "" }}
+                                    </p>
+                                    <!-- Tags -->
+                                    <div v-if="post.post_content?.tags?.length" class="d-flex flex-wrap gap-1">
+                                    <span
+                                        v-for="tag in post.post_content.tags"
+                                        :key="tag"
+                                        class="badge bg-light text-dark border"
+                                    >
+                                        #{{ tag }}
+                                    </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <nav>
-                    <div class="row">
-                        <div class="col-md-6 px-0 ">
-                        <ul class="pagination justify-content-center justify-content-md-end">
-                            <li :class="['page-item', { disabled: currentPage === 1 }]">
-                            <button @click="currentPage=1" class="page-link">First</button>
-                            </li>
-                            <li :class="['page-item', { disabled: currentPage === 1 }]">
-                            <button @click="currentPage--" class="page-link">Previous</button>
-                            </li>
-                            <template v-if="currentPage === 1"></template>
-                            <template v-else>
-                                <li class="page-item">
-                                    <button @click="currentPage = 1" class="page-link">1</button>
-                                </li>
-                                <li v-if="currentPage > 2" class="page-item">
-                                    <span class="page-link">&hellip;</span>
-                                </li>
-                            </template>
-                            <li class="page-item active">
-                            <span class="page-link rounded-0">{{ currentPage }}</span>
-                            </li>
-                            </ul>
-</div>
-<div class="col-md-6 px-0 ">
-<ul class="pagination justify-content-center justify-content-md-start">
-                            <li class="page-item active ">
-                            <span class="page-link rounded-0">{{ currentPage + 1 }}</span>
-                            </li>
-                            <li v-if="currentPage < posts.length - 3" class="page-item">
-                                <span class="page-link">&hellip;</span>
-                            </li>
-
-                            <li v-if="currentPage < posts.length - 2" class="page-item">
-                                <button @click="currentPage = posts.length-2" class="page-link">
-                                    {{ posts.length-1 }}
-                                </button>
-                            </li>
-                            <li :class="['page-item', { disabled: currentPage === this.posts.length-2 }]">
-                            <button @click="currentPage++" class="page-link">Next</button>
-                            </li>
-                            <li :class="['page-item', { disabled: currentPage === this.posts.length-2 }]">
-                            <button @click="currentPage=this.posts.length-2" class="page-link">Last</button>
-                            </li>
-                        </ul>
+                        <div class="row">
+                            <div class="col-md-6 px-0 ">
+                                <ul class="pagination justify-content-center justify-content-md-end">
+                                    <li :class="['page-item', { disabled: currentPage === 1 }]">
+                                        <button @click="currentPage=1" class="page-link">First</button>
+                                    </li>
+                                    <li :class="['page-item', { disabled: currentPage === 1 }]">
+                                        <button @click="currentPage--" class="page-link">Previous</button>
+                                    </li>
+                                    <template v-if="currentPage === 1"></template>
+                                    <template v-else>
+                                        <li class="page-item">
+                                            <button @click="currentPage = 1" class="page-link">1</button>
+                                        </li>
+                                        <li v-if="currentPage > 2" class="page-item">
+                                            <span class="page-link">&hellip;</span>
+                                        </li>
+                                    </template>
+                                    <li class="page-item active">
+                                        <span class="page-link rounded-0">{{ currentPage }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6 px-0 ">
+                                <ul class="pagination justify-content-center justify-content-md-start">
+                                    <li class="page-item active ">
+                                        <span class="page-link rounded-0">{{ currentPage + 1 }}</span>
+                                    </li>
+                                    <li v-if="currentPage < posts.length - 2" class="page-item">
+                                        <span class="page-link">&hellip;</span>
+                                    </li>
+                                    <li v-if="currentPage < posts.length - 1" class="page-item">
+                                        <button @click="currentPage = posts.length-1" class="page-link"> {{ posts.length }} </button>
+                                    </li>
+                                    <li :class="['page-item', { disabled: currentPage === this.posts.length-1 }]">
+                                        <button @click="currentPage++" class="page-link">Next</button>
+                                    </li>
+                                    <li :class="['page-item', { disabled: currentPage === this.posts.length-1 }]">
+                                        <button @click="currentPage=this.posts.length-1" class="page-link">Last</button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                        </nav>
-                        </div>
-                    </div>
-                    </div>
-<br/>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    <br/>
 </template>
