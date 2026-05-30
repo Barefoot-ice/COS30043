@@ -8,7 +8,17 @@ export default {
             loginErr: null
         };
     },
-    computed: mapState(["loggedIn", "user"]),
+    computed: {
+    ...mapState([
+      'loggedIn',
+      'user'
+    ]),
+    // Hide the navbar's log-in fields when the user is already on the dedicated sign-up / log-in page, to avoid two login forms competing for attention.
+    showAuthInNav: function() {
+      const hiddenRoutes = ['signup', 'login']
+      return !hiddenRoutes.includes(this.$route.name)
+    }
+  },
     methods: {
         async submitLogIn(username, password) {
             let userDetails = null
@@ -72,7 +82,7 @@ export default {
                         Logout
                     </button>
                 </template>
-                <template v-else>
+                <template v-else-if="showAuthInNav">
                     <form class="d-flex" @submit.prevent="submitLogIn($refs.username.value, $refs.password.value)">
                         <input type="text" ref="username" class="form-control" placeholder="Username" />
                         <input type="password" ref="password" class="form-control" placeholder="Password" />
