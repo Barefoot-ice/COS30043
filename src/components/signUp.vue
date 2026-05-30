@@ -107,10 +107,13 @@ export default {
     methods: {
         async newUser(username, email, password) {
             try {
-                console.log(await api.newUser(username, email, password));
+                const result = await api.newUser(username, email, password);
+                console.log(result);
+                return result && result.status === 'success'
             }
             catch (err) {
-                console.error("Failed to submit:", err);
+                console.error("Failed to create user:", err);
+                return false
             }
         },
         async callLogIn(username, password) {
@@ -119,14 +122,16 @@ export default {
                 userDetails = await api.getLogin(username, password);
             }
             catch (err) {
-                console.error("Failed to load posts:", err);
+                console.error("Failed to log in:", err);
             }
             if (userDetails && userDetails.length > 0) {
                 this.$store.commit("logIn", userDetails[0]);
                 this.loginErr = null;
+                return true
             }
             else {
                 this.loginErr = 'Invalid Username or Password'
+                return false
             }
         },
         resetForm: function() {
@@ -161,23 +166,36 @@ export default {
             this.step = 'signup-email'
             this.submitAttempted = false
         },
-        submitSignUp: function() {
+        async submitSignUp() {
             this.submitAttempted = true
             if (!this.passwordStepValid) return
-            // TODO: replace with POST to Mercury API once backend is ready. Ex: POST /api/users { email, password } -> { firstName, lastName, ... }
             const username = this.email.split('@')[0]
-            this.newUser(username, this.email, this.password)
-            this.callLogIn(username, this.password)
-            this.submitMessage = 'Account created — welcome!'
-            // Send the user to the home page once logged in.
+            // create the user in the database, and wait for it to finish.
+            const createdOk = await this.newUser(username, this.email, this.password)
+            if (!createdOk) {
+                this.loginErr = 'Could not create account. Please try again.'
+                return
+            }
+            // now that the user exists, log them in.
+            const loggedInOk = await this.callLogIn(username, this.password)
+            if (!loggedInOk) {
+                // Account was created but auto-login failed. Send them to the login page.
+                this.loginErr = 'Account created, but log in failed. Please log in manually.'
+                return
+            }
+            // both steps succeeded, show success and redirect.
+            this.submitMessage = 'Account created - welcome!'
             setTimeout(() => { this.$router.push({ name: 'home' }) }, 800)
         },
-        submitLogIn: function() {
+        async submitLogIn() {
             this.submitAttempted = true
             if (!this.loginValid) return
-            // TODO: replace with POST to Mercury API once backend is ready. Ex: POST /api/login { email, password } -> { firstName, lastName, ... }
             const username = this.email.split('@')[0]
-            this.callLogIn(username, this.password)
+            const loggedInOk = await this.callLogIn(username, this.password)
+            if (!loggedInOk) {
+                // callLogIn already set loginErr - just stop here.
+                return
+            }
             this.submitMessage = 'Welcome back!'
             setTimeout(() => { this.$router.push({ name: 'home' }) }, 800)
         }
@@ -186,5 +204,210 @@ export default {
 </script>
 
 <template>
-    <p>Sign Up - Placeholder</p>
+    <div class="container py-5 justify-content-center">
+        <div class="row">
+            <div class="col">
+
+                <!-- If already logged in, show a friendly message instead of the form. -->
+                <div v-if="loggedIn" class="card shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <h5 class="card-title mb-3">You're already logged in</h5>
+                        <p class="card-text mb-4">Welcome back, {{ user.firstName }}!</p>
+                        <router-link class="btn btn-primary" to="/home">Go to Home</router-link>
+                    </div>
+                </div>
+
+                <div v-else class="card shadow-sm">
+                    <div class="card-body p-4">
+
+                        <!-- Animated step transitions: slide left/right depending on direction. -->
+                        <transition :name="transitionName" mode="out-in">
+                            <!-- STEP: LOG IN -->
+                            <div v-if="step === 'login'" key="login">
+                                <h4 class="card-title mb-1">Log In</h4>
+                                <p class="text-body-secondary mb-4">Welcome back. Please enter your details.</p>
+
+                                <div class="mb-3">
+                                    <label for="login-email" class="form-label">Email</label>
+                                    <input
+                                        id="login-email"
+                                        type="email"
+                                        class="form-control"
+                                        :class="{ 'is-invalid': emailError }"
+                                        v-model="email"
+                                        @blur="touched.email = true"
+                                        placeholder="you@example.com"
+                                        autocomplete="email" />
+                                    <div v-if="emailError" class="invalid-feedback">{{ emailError }}</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="login-password" class="form-label">Password</label>
+                                    <input
+                                        id="login-password"
+                                        type="password"
+                                        class="form-control"
+                                        :class="{ 'is-invalid': submitAttempted && password === '' }"
+                                        v-model="password"
+                                        @blur="touched.password = true"
+                                        @keyup.enter="submitLogIn"
+                                        placeholder="Enter your password"
+                                        autocomplete="current-password" />
+                                    <div v-if="submitAttempted && password === ''" class="invalid-feedback">
+                                        Password is required.
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-primary w-100 mb-3"
+                                    @click="submitLogIn">
+                                    Log In
+                                </button>
+
+                                <p v-if="submitMessage" class="text-success text-center mb-2">{{ submitMessage }}</p>
+
+                                <p class="text-center mb-0">
+                                    Don't have an account?
+                                    <a href="#" @click.prevent="goToSignUp">Sign Up</a>
+                                </p>
+                            </div>
+                            <!-- STEP: SIGN-UP, STEP 1 (EMAIL) -->
+                            <div v-else-if="step === 'signup-email'" key="signup-email">
+                                <h4 class="card-title mb-1">Create Account</h4>
+                                <p class="text-body-secondary mb-4">Step 1 of 2 - enter your email to get started.</p>
+
+                                <div class="mb-3">
+                                    <label for="signup-email" class="form-label">Email</label>
+                                    <input
+                                        id="signup-email"
+                                        type="email"
+                                        class="form-control"
+                                        :class="{ 'is-invalid': emailError }"
+                                        v-model="email"
+                                        @blur="touched.email = true"
+                                        @keyup.enter="proceedToPassword"
+                                        placeholder="you@example.com"
+                                        autocomplete="email" />
+                                    <div v-if="emailError" class="invalid-feedback">{{ emailError }}</div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-primary w-100 mb-3"
+                                    @click="proceedToPassword">
+                                    Create Account
+                                </button>
+
+                                <p class="text-center mb-0">
+                                    Already have an account?
+                                    <a href="#" @click.prevent="goToLogin">Log In</a>
+                                </p>
+                            </div>
+                            <!-- STEP: SIGN-UP, STEP 2 (PASSWORD) -->
+                            <div v-else-if="step === 'signup-password'" key="signup-password">
+                                <h4 class="card-title mb-1">Create Password</h4>
+                                <p class="text-body-secondary mb-4">
+                                    Step 2 of 2 - secure your account for <strong>{{ email }}</strong>.
+                                </p>
+
+                                <div class="mb-3">
+                                    <label for="signup-password" class="form-label">Password</label>
+                                    <input
+                                        id="signup-password"
+                                        type="password"
+                                        class="form-control"
+                                        :class="{ 'is-invalid': passwordError }"
+                                        v-model="password"
+                                        @blur="touched.password = true"
+                                        placeholder="At least 8 characters"
+                                        autocomplete="new-password" />
+                                    <div v-if="passwordError" class="invalid-feedback">{{ passwordError }}</div>
+
+                                    <!-- Password strength meter -->
+                                    <div v-if="password.length > 0" class="mt-2">
+                                        <div class="progress" style="height: 6px;">
+                                            <div
+                                                class="progress-bar"
+                                                :class="passwordStrengthClass"
+                                                role="progressbar"
+                                                :style="{ width: passwordStrengthPercent + '%' }"
+                                                :aria-valuenow="passwordStrength"
+                                                aria-valuemin="0"
+                                                aria-valuemax="4">
+                                            </div>
+                                        </div>
+                                        <small class="text-body-secondary">Strength: {{ passwordStrengthLabel }}</small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="signup-confirm" class="form-label">Confirm Password</label>
+                                    <input
+                                        id="signup-confirm"
+                                        type="password"
+                                        class="form-control"
+                                        :class="{ 'is-invalid': confirmPasswordError }"
+                                        v-model="confirmPassword"
+                                        @blur="touched.confirmPassword = true"
+                                        @keyup.enter="submitSignUp"
+                                        placeholder="Re-enter your password"
+                                        autocomplete="new-password" />
+                                    <div v-if="confirmPasswordError" class="invalid-feedback">{{ confirmPasswordError }}</div>
+                                </div>
+
+                                <div class="d-flex gap-2 mb-3">
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-secondary flex-fill"
+                                        @click="backToEmail">
+                                        Back
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary flex-fill"
+                                        @click="submitSignUp">
+                                        Sign Up
+                                    </button>
+                                </div>
+
+                                <p v-if="submitMessage" class="text-success text-center mb-0">{{ submitMessage }}</p>
+                            </div>
+
+                        </transition>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </template>
+
+<style scoped>
+/* Slide-forward (next step): new view enters from the right, old view exits left. */
+.slide-next-enter-active,
+.slide-next-leave-active,
+.slide-prev-enter-active,
+.slide-prev-leave-active {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.slide-next-enter-from {
+    opacity: 0;
+    transform: translateX(30px);
+}
+.slide-next-leave-to {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+/* Slide-back (previous step): mirror direction. */
+.slide-prev-enter-from {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+.slide-prev-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+</style>

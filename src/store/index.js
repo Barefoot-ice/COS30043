@@ -14,8 +14,7 @@ export const store = createStore({
     },
     getters:{
         isLoggedIn: (state) => !!state.loggedIn,
-        userRole: (state) => state.user.role,
-        userId: (state) => state.user.account_id 
+        userRole: (state) => state.user.role
     },
     mutations:{
         logIn (state, username) {
