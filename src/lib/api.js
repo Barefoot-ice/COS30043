@@ -70,9 +70,9 @@ export const api = {
   });
 
   return response.json();
-}
-};
-    getAccount: async (id) => {
+  },
+
+  getAccount: async (id) => {
       const response = await fetch(`${BASE}/accountget.php?account_id=${id}`);
       return mapArrayToUser(await response.json());
   },
