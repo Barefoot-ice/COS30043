@@ -66,14 +66,8 @@ export default {
                     <li class="nav-item">
                         <router-link class="nav-link" to="/about">About</router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" to="/social">Social</router-link>
-                    </li>
                     <li v-if="loggedIn === false" class="nav-item">
                         <router-link class="nav-link" to="/signup">Sign Up</router-link>
-                    </li>
-                    <li v-if="loggedIn === true" class="nav-item">
-                        <router-link class="nav-link" to="/account">Account Details</router-link>
                     </li>
                 </ul>
                 <template v-if="loggedIn">
@@ -113,6 +107,9 @@ export default {
                         </li>
                         <li class="dropdown-item">
                             <router-link class="nav-link" to="/social">Post to Social</router-link>
+                        </li>
+                        <li class="dropdown-item">
+                            <router-link class="nav-link" to="/account">Account Details</router-link>
                         </li>
                     </ul>
                 </div>
