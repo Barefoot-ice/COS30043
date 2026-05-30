@@ -1,4 +1,4 @@
-const BASE = "https://mercury.swin.edu.au/cos30043/s102096755/project/api";
+const BASE = "https://mercury.swin.edu.au/cos30043/s105139158/assignment/api";
 
 const mapArrayToJob = (row) => {
   return {
