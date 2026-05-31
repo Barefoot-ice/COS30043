@@ -16,6 +16,7 @@ if ($method === 'GET') {
         posts.account_id,
         posts.post_content,
         posts.created_at,
+        posts.likes,
         accounts.username
         FROM posts
         JOIN accounts ON posts.account_id = accounts.account_id
@@ -39,6 +40,26 @@ if ($method === 'POST') {
 
     $input = json_decode(file_get_contents("php://input"), true);
 
+    //If Liking a post
+    if (isset($input['action']) && $input['action'] === 'like') {
+
+        $post_id = $input['post_id'];
+
+        $query = "
+            UPDATE posts
+            SET likes = likes + 1
+            WHERE post_id = ?
+        ";
+
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, "i", $post_id);
+        mysqli_stmt_execute($stmt);
+
+        echo json_encode(["message" => "Liked"]);
+        exit();
+    }
+
+    //When making a new post
     $account_id = $input['account_id'];
     $content = json_encode($input['post_content']);
 

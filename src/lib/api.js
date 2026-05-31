@@ -61,6 +61,20 @@ export const api = {
     const response = await fetch(`${BASE}/login.php?email=${email}&password=${password}`);
     return response.json();
   },
+  likePost: async (postId) => {
+  const response = await fetch(`${BASE}/posts.php`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      action: "like",
+      post_id: postId
+    })
+  });
+
+  return response.json();
+  },
   createPost: async (post) => {
   const response = await fetch(`${BASE}/posts.php`, {
     method: "POST",

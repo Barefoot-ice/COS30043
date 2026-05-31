@@ -109,6 +109,9 @@
                 #{{ tag }}
               </span>
             </div>
+            <div class="mt-3">
+              <button class="btn btn-outline-primary btn-sm" @click="likePost(post.post_id)">&#128077 {{ post.likes }} </button>
+            </div>
 
           </div>
 
@@ -188,6 +191,14 @@ export default {
         hour: "2-digit",
         minute: "2-digit",
       });
+    },
+    async likePost(postId) {
+      try {
+        await api.likePost(postId);
+        await this.fetchPosts();
+      } catch (err) {
+        console.error(err);
+      }
     },
 
     async submitPost() {
