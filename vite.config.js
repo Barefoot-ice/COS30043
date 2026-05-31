@@ -4,5 +4,5 @@ import vuetify from 'vite-plugin-vuetify';
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [vue(), vuetify({ autoImport: true })],
-    base: mode === 'production' ? '/cos30043/s105139158/assignment/' : '/',
+    base: mode === 'production' ? '/cos30043/s102514765/assignment/' : '/',
 }))
