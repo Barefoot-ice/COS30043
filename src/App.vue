@@ -111,8 +111,7 @@ export default {
                             ---- EMPLOYER ----
                             </li>
                             <li class="dropdown-item">
-                                Post Job Listing
-                            <!-- <router-link class="nav-link" to="/jobpost">Post Job Listing</router-link> -->
+                            <router-link class="nav-link" to="/jobpost">Post Job Listing</router-link>
                             </li>
                         </template>
                         <li class="dropdown-header">

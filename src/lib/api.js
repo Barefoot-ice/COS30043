@@ -133,5 +133,17 @@ newUser: async (username, email, password)=> {
     });
     console.log(response);
     return response;
-  }
+  },
+  addJob: async (job_id, job_title, category, location, employment_type, job_level, job_description, application_deadline, supervisor, positions_available, start_date, salary_range, required_skills, preferred_qualifications, posted_date, company, tags) => {
+    const response = await fetch(`${BASE}/jobadd.php`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            job_id, job_title, category, location, employment_type, job_level, job_description, application_deadline, supervisor, positions_available, start_date, salary_range, required_skills, preferred_qualifications, posted_date, company, tags
+        })
+    });
+    return response;
+  },
 };
