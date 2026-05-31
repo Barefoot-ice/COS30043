@@ -1,7 +1,6 @@
 <template>
   <v-container class="mt-4">
     <h3 class="text-center mb-4 font-weight-bold text-h5">Account Details</h3>
-
     <!-- ================= VIEW MODE ================= -->
     <v-row v-if="details.username && !isEditing" class="g-3">
       <v-col cols="12" md="6" lg="4">
