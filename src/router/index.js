@@ -14,7 +14,7 @@ import Admin from "../components/admin/admin.vue";
 import JobApproveDetail from "../components/admin/jobApproveDetail.vue";
 import social from '../components/Social.vue';
 import jobEdit from "../components/jobs/jobEdit.vue";
-
+import jobpost from "../components/jobs/jobpost.vue";
 const routes = [
   { path: "/", redirect: "/home" },
   { path: "/home", name: "home", component: Home },
@@ -40,6 +40,10 @@ const routes = [
 
       { path: ":id", name: "jobDetail", component: JobDetail },
     ],
+  },
+    { path: '/jobpost',
+    component: jobpost,
+    meta: { requiresLogIn: true, role: 'admin'  }
   },
   {
     path: "/admin",
