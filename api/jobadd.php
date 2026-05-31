@@ -57,7 +57,7 @@ if ($method === 'POST') {
     // 19 types validation definition string matching the ordered properties below
     mysqli_stmt_bind_param(
         $stmt, 
-        "sssssssssisssssssii",
+        "sssssssssissssssisi",
         $job_id, 
         $job_title, 
         $category, 
