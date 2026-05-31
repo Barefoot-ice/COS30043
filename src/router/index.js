@@ -46,6 +46,11 @@ const routes = [
     children: [{ path: ":id", component: JobApproveDetail }],
     meta: { requiresLogIn: true, role: 'admin' }
   },
+  { 
+    path: "/jobedit",
+    component: jobEdit,
+    meta: { requiresLogIn: true, role: 'admin' } 
+  },
 ];
 const router = createRouter({
   history: createWebHashHistory(),
