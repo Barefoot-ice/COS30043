@@ -15,6 +15,8 @@ if ($method === 'POST') {
         echo json_encode(["error" => "Invalid JSON payload."]);
         exit;
     }
+
+    // Extract all 17 fields coming from your updated Vue script
     $job_id = isset($params['job_id']) ? trim($params['job_id']) : '';
     $job_title = isset($params['job_title']) ? trim($params['job_title']) : '';
     $category = isset($params['category']) ? trim($params['category']) : '';
@@ -31,20 +33,31 @@ if ($method === 'POST') {
     $preferred_qualifications = isset($params['preferred_qualifications']) ? trim($params['preferred_qualifications']) : '';
     $posted_date = isset($params['posted_date']) ? trim($params['posted_date']) : '';
     $company = isset($params['company']) ? trim($params['company']) : '';
+    
     $approved = 0;
     $tags = isset($params['tags']) ? trim($params['tags']) : '';
+    $approval_read = 0;
 
-
+    // Fully structured query covering all 19 target columns
     $query = "INSERT INTO `jobs` (
         `job_id`, `job_title`, `category`, `location`, `employment_type`, 
         `job_level`, `job_description`, `application_deadline`, `supervisor`, 
         `positions_available`, `start_date`, `salary_range`, `required_skills`, 
-        `preferred_qualifications`, `posted_date`, `company`, `approved`, `tags`
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        `preferred_qualifications`, `posted_date`, `company`, `approved`, `tags`, `approvalRead`
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    
     $stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param(
+
+    if (!$stmt) {
+        http_response_code(500);
+        echo json_encode(["error" => "SQL Statement Preparation failed: " . mysqli_error($conn)]);
+        exit;
+    }
+
+    // 19 types validation definition string matching the ordered properties below
+    mysqli_stmt_bind_param(
         $stmt, 
-        "sssssssssissssssis",
+        "sssssssssisssssssii",
         $job_id, 
         $job_title, 
         $category, 
@@ -62,20 +75,22 @@ mysqli_stmt_bind_param(
         $posted_date, 
         $company,
         $approved,
-        $tags
+        $tags,
+        $approval_read
     );    
-    if ($stmt && mysqli_stmt_execute($stmt)) {
+
+    if (mysqli_stmt_execute($stmt)) {
         $affected_rows = mysqli_stmt_affected_rows($stmt);
-        
         http_response_code(200);
+        echo json_encode(["success" => true, "message" => "Job post created successfully.", "affected_rows" => $affected_rows]);
         mysqli_stmt_close($stmt);
     } else {
         http_response_code(500);
-        echo json_encode(["error" => "Database execution failed: " . mysqli_error($conn)]);
+        echo json_encode(["error" => "Database execution failure: " . mysqli_stmt_error($stmt)]);
     }
-    
     exit;
 }
-http_response_code(405);
 
+http_response_code(405);
+echo json_encode(["error" => "Method Not Allowed"]);
 ?>
