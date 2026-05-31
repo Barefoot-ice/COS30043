@@ -138,9 +138,16 @@
         :rules="[rules.required]"
         required
       ></v-text-field>
+      <v-text-field
+        label="Tags"
+        v-model="job.tags"
+        variant="outlined"
+        :rules="[rules.required]"
+        required
+      ></v-text-field>
+
 
       <v-col cols="12" class="d-flex justify-content-between mt-4">
-        <!-- Changed to a simple click event monitored by form submit rules -->
         <v-btn type="submit" color="success" class="px-6">Send for approval</v-btn>
       </v-col>
     </v-form>
@@ -170,7 +177,8 @@ export default {
             required_skills: '',
             preferred_qualifications: '',
             posted_date: '',
-            company: ''
+            company: '',
+            tags: '',
         },
     };
   },
@@ -180,22 +188,43 @@ export default {
   },
   methods: {
     async checkId() {
-    try {
-      const jobId = this.job.job_id;
-      if (!jobId) return false; 
+      try {
+        const jobId = this.job.job_id;
+        if (!jobId) return false; 
 
-      const details = await api.getJobDetail(jobId);
-      
-      return details !== null && details !== undefined;
-    } catch (error) {
-      return false; 
-    }
+        const details = await api.getJobDetail(jobId);
+        return details !== null && details !== undefined;
+      } catch (error) {
+        return false; 
+      }
+    },
+    formatToArrayString(inputStr) {
+      if (!inputStr) return '[]';
+      const itemsArray = inputStr.trim().split(/\s+/).filter(Boolean);
+      const quotedArray = itemsArray.map(item => `'${item}'`);
+      return JSON.stringify(quotedArray);
     },
     async submit() {
+      const { valid } = await this.$refs.form.validate();
+      if (!valid) {
+        alert("Please correct the validation errors on the form before submitting.");
+        return;
+      }
+
       const idExists = await this.checkId(); 
-      if (!idExists) {
+      if (idExists) {
+        alert("This Listing ID already exists. Please pick a unique identifier.");
+        return;
+      }
+
+      const formattedSkills = this.formatToArrayString(this.job.required_skills);
+      const formattedQualifications = this.formatToArrayString(this.job.preferred_qualifications);
+      const formattedTags = this.formatToArrayString(this.job.tags);
+
+      try {
         const response = await api.addJob( 
           this.job.job_id,
+          this.job.job_title,
           this.job.category,
           this.job.location,
           this.job.employment_type,
@@ -204,7 +233,13 @@ export default {
           this.job.application_deadline,
           this.job.supervisor,
           this.job.positions_available,
-          this.job.start_date
+          this.job.start_date,
+          this.job.salary_range,
+          formattedSkills,          
+          formattedQualifications,  
+          this.job.posted_date,
+          this.job.company,
+          formattedTags             
         );
         
         if (response.ok) {
@@ -214,12 +249,12 @@ export default {
           const errData = await response.json();
           alert(`Error saving updates: ${errData.error || 'Unknown error'}`);
         }
+      } catch (error) {
+        console.error("Submission error encountered:", error);
+        alert("An error occurred during communication with the server.");
       }
-
-
     }
   },
-
 };
 </script>
 <style scoped>
