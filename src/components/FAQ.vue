@@ -64,55 +64,55 @@
   </div>
 <!-- spacer -->
   <div class="shadow bg-white">
-    <a class="text-primary" data-bs-toggle="collapse" href="#q5" role="button" aria-expanded="false" aria-controls="q5">
+    <a class="text-primary" data-bs-toggle="collapse" href="#q6" role="button" aria-expanded="false" aria-controls="q6">
       How did you implement social interaction features?
     </a>
   </div>
-  <div class="collapse shadow-none bg-light" id="q5"> 
+  <div class="collapse shadow-none bg-light" id="q6"> 
     <p>
       These are available through the use of liking chat posts
     </p>
   </div>
 <!-- spacer -->
   <div class="shadow bg-white">
-    <a class="text-primary" data-bs-toggle="collapse" href="#q5" role="button" aria-expanded="false" aria-controls="q5">
+    <a class="text-primary" data-bs-toggle="collapse" href="#q7" role="button" aria-expanded="false" aria-controls="q7">
       Where is pagination implemented?
     </a>
   </div>
-  <div class="collapse shadow-none bg-light" id="q5"> 
+  <div class="collapse shadow-none bg-light" id="q7"> 
     <p>
       Pagination is implemented in both the job view and the chat log
     </p>
   </div>
 <!-- spacer -->
   <div class="shadow bg-white">
-    <a class="text-primary" data-bs-toggle="collapse" href="#q5" role="button" aria-expanded="false" aria-controls="q5">
+    <a class="text-primary" data-bs-toggle="collapse" href="#q8" role="button" aria-expanded="false" aria-controls="q8">
       Why can't i log in?
     </a>
   </div>
-  <div class="collapse shadow-none bg-light" id="q5"> 
+  <div class="collapse shadow-none bg-light" id="q8"> 
     <p>
       Please ensure you are using your account email to log in. If this is not the cause of the issue, please contact site moderation
     </p>
   </div>
 <!-- spacer -->
   <div class="shadow bg-white">
-    <a class="text-primary" data-bs-toggle="collapse" href="#q5" role="button" aria-expanded="false" aria-controls="q5">
+    <a class="text-primary" data-bs-toggle="collapse" href="#q9" role="button" aria-expanded="false" aria-controls="q9">
       What do employers have access to?
     </a>
   </div>
-  <div class="collapse shadow-none bg-light" id="q5"> 
+  <div class="collapse shadow-none bg-light" id="q9"> 
     <p>
       Employers can sumbit job listing requests for site approval and edit their own approved listings. The editing system is restricted to prevent abusing the system
     </p>
   </div>
 <!-- spacer -->
   <div class="shadow bg-white">
-    <a class="text-primary" data-bs-toggle="collapse" href="#q5" role="button" aria-expanded="false" aria-controls="q5">
+    <a class="text-primary" data-bs-toggle="collapse" href="#q10" role="button" aria-expanded="false" aria-controls="q10">
       How do i become an admin?
     </a>
   </div>
-  <div class="collapse shadow-none bg-light" id="q5"> 
+  <div class="collapse shadow-none bg-light" id="q10"> 
     <p>
       Generate a account and request it from the admin team
     </p>
