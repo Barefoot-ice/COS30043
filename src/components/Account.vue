@@ -1,8 +1,6 @@
 <template>
-  <!-- v-container acts like Bootstrap's container class -->
   <v-container class="mt-4">
     <h3 class="text-center mb-4 font-weight-bold text-h5">Account Details</h3>
-
     <!-- ================= VIEW MODE ================= -->
     <v-row v-if="details.username && !isEditing" class="g-3">
       <v-col cols="12" md="6" lg="4">
@@ -57,7 +55,6 @@
     </v-row>
 
     <!-- ================= EDIT MODE WITH FORM CONTROLS ================= -->
-    <!-- ref="form" registers the component instance so we can programmatically check validity -->
     <v-form v-if="details.username && isEditing" ref="accountForm" @submit.prevent="saveDetails">
       <v-row class="g-3">
         
@@ -145,7 +142,6 @@ export default {
             isEditing: false,
 
             // VUETIFY VALIDATION RULES
-            // Rules are arrays of functions that return true or an error string
             usernameRules: [
                 v => !!v || 'Username is required',
                 v => (v && v.trim().length > 0) || 'Username cannot be blank'
@@ -191,16 +187,12 @@ export default {
             this.isEditing = false;
         },
         async saveDetails() {
-            // 1. Ask Vuetify to run all validation rules against the fields
             const { valid } = await this.$refs.accountForm.validate();
-
-            // 2. If any input is failing validation, exit immediately
             if (!valid) {
                 return;
             }
 
             try {
-                // 3. Trigger api.js backend payload update
                 const result = await api.editAccount(
                     this.currentUserId,
                     this.editedDetails.username,
@@ -223,11 +215,11 @@ export default {
 };
 </script>
 <style scoped>
-/* Force outer component container padding constraints */
+
 .v-container {
   padding-left: 24px !important;
   padding-right: 24px !important;
-  max-width: 1200px !important; /* Prevents the fields stretching infinitely wide on big monitors */
+  max-width: 1200px !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }

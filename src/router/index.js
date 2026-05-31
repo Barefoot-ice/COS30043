@@ -13,6 +13,7 @@ import jobBlank from "../components/jobs/jobBlank.vue";
 import Admin from "../components/admin/admin.vue";
 import JobApproveDetail from "../components/admin/jobApproveDetail.vue";
 import social from '../components/Social.vue';
+import jobEdit from "../components/jobs/jobEdit.vue";
 
 const routes = [
   { path: "/", redirect: "/home" },
@@ -45,6 +46,11 @@ const routes = [
     component: Admin,
     children: [{ path: ":id", component: JobApproveDetail }],
     meta: { requiresLogIn: true, role: 'admin' }
+  },
+  { 
+    path: "/jobedit",
+    component: jobEdit,
+    meta: { requiresLogIn: true, role: 'admin' } 
   },
 ];
 const router = createRouter({

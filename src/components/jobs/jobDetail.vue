@@ -37,6 +37,11 @@
             <div class="tags">
             <span v-for="tag in job.tags" :key="tag" class="tag">{{ tag }}</span>
             </div>
+            <!-- Added by Daniel to pass to jobedit page -->
+            <div v-if="this.role === 'admin'" cols="12" class="text-end mt-2">
+                <v-btn color="primary" class="px-6" @click="move">Change Job Details</v-btn>
+            </div>
+            <!-- ^^^^^^^Added by Daniel to pass to jobedit page ^^^^^^^-->
         </div>
     </div>
 </div>
@@ -49,13 +54,17 @@
 
         data() {
             return {
-            job: null
+            job: null,
+            role: "",
             };
         },
         methods: {
             loadJob() {
                 const jobId = this.$route.params.id;
                 this.job = this.jobs.find(j => j.job_id === jobId) || null;
+            },
+            move() {
+                this.$router.push({ path: '/jobEdit', query: { id: this.$route.params.id } });
             }
         },
         watch: {
@@ -64,6 +73,11 @@
         },
         mounted() {
             this.loadJob();
+            if (this.$store.getters.userRole != null) {
+                this.role = this.$store.getters.userRole;
+            } else {
+                this.role = 'guest';
+            }
         }
             }
 </script>
