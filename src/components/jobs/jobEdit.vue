@@ -158,6 +158,7 @@ export default {
         
         if (response.ok) {
           alert("Job updates saved successfully.");
+          this.$router.push('/jobs');
         } else {
           const errData = await response.json();
           alert(`Error saving updates: ${errData.error || 'Unknown error'}`);
