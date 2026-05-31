@@ -43,7 +43,7 @@ const routes = [
   },
     { path: '/jobpost',
     component: jobpost,
-    meta: { requiresLogIn: true, role: 'admin'  }
+    meta: { requiresLogIn: true, role: ['employer', 'admin'] }
   },
   {
     path: "/admin",
@@ -68,7 +68,7 @@ router.beforeEach((to, from, next) => {
   const userRole = store.getters.userRole;
   if (to.meta.requiresLogIn && !isLoggedIn) {
     next('/login')
-  } else if (to.meta.role && userRole !== to.meta.role) {
+  } else if (to.meta.role && !to.meta.role.includes(userRole)) {
     // next('/home')
     next('/unauthorised')
   } else {
