@@ -98,4 +98,26 @@ newUser: async (username, email, password)=> {
     console.log(response);
     return response;
   },
+  editJob: async (job_id, category, location, employment_type, job_level, job_description, application_deadline, supervisor, positions_available, start_date) => {
+      const response = await fetch(`${BASE}/jobedit.php`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({job_id: job_id, category: category, location: location, employment_type: employment_type, job_level: job_level, job_description: job_description, application_deadline: application_deadline, supervisor: supervisor, positions_available: positions_available, start_date: start_date})
+    });
+    console.log(response);
+    return response;
+  },
+  deleteJob: async (job_id) => {
+    const response = await fetch(`${BASE}/jobdelete.php`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({job_id: job_id})
+    });
+    console.log(response);
+    return response;
+  }
 };
