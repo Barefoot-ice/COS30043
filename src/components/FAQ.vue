@@ -48,7 +48,7 @@
   </div>
   <div class="collapse shadow-none bg-light" id="q4"> 
     <p>
-      I don't actually know
+      chat feature is available for logged in users and can be vied even when not logged in on the home page
     </p>
   </div>
 <!-- spacer -->
@@ -60,6 +60,61 @@
   <div class="collapse shadow-none bg-light" id="q5"> 
     <p>
       These features are only available for registered account holders, please sign up to access these features
+    </p>
+  </div>
+<!-- spacer -->
+  <div class="shadow bg-white">
+    <a class="text-primary" data-bs-toggle="collapse" href="#q5" role="button" aria-expanded="false" aria-controls="q5">
+      How did you implement social interaction features?
+    </a>
+  </div>
+  <div class="collapse shadow-none bg-light" id="q5"> 
+    <p>
+      These are available through the use of liking chat posts
+    </p>
+  </div>
+<!-- spacer -->
+  <div class="shadow bg-white">
+    <a class="text-primary" data-bs-toggle="collapse" href="#q5" role="button" aria-expanded="false" aria-controls="q5">
+      Where is pagination implemented?
+    </a>
+  </div>
+  <div class="collapse shadow-none bg-light" id="q5"> 
+    <p>
+      Pagination is implemented in both the job view and the chat log
+    </p>
+  </div>
+<!-- spacer -->
+  <div class="shadow bg-white">
+    <a class="text-primary" data-bs-toggle="collapse" href="#q5" role="button" aria-expanded="false" aria-controls="q5">
+      Why can't i log in?
+    </a>
+  </div>
+  <div class="collapse shadow-none bg-light" id="q5"> 
+    <p>
+      Please ensure you are using your account email to log in. If this is not the cause of the issue, please contact site moderation
+    </p>
+  </div>
+<!-- spacer -->
+  <div class="shadow bg-white">
+    <a class="text-primary" data-bs-toggle="collapse" href="#q5" role="button" aria-expanded="false" aria-controls="q5">
+      What do employers have access to?
+    </a>
+  </div>
+  <div class="collapse shadow-none bg-light" id="q5"> 
+    <p>
+      Employers can sumbit job listing requests for site approval and edit their own approved listings. The editing system is restricted to prevent abusing the system
+    </p>
+  </div>
+<!-- spacer -->
+  <div class="shadow bg-white">
+    <a class="text-primary" data-bs-toggle="collapse" href="#q5" role="button" aria-expanded="false" aria-controls="q5">
+      How do i become an admin?
+    </a>
+  </div>
+  <div class="collapse shadow-none bg-light" id="q5"> 
+    <p>
+      Generate a account and request it from the admin team
     </p>
   </div>
 <!-- spacer -->
