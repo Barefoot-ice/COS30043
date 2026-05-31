@@ -37,10 +37,11 @@ export default {
     async mounted () {
         
     try {
-        this.jobs = await api.getJobs();
-    } catch (err) {
-        console.error("Failed to load jobs:", err);
-    }
+            this.jobs = (await api.getJobs()).filter((job) => job.approved === true);
+            
+        } catch (err) {
+            console.error("Failed to load jobs:", err);
+        }
     try {
         this.posts = await api.getPosts();
     } catch (err) {
